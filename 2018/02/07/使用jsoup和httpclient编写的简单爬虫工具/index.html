@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20180207115149376?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20180207121408456?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20180207121431606?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2018-02-07T04:36:35.604Z">
+<meta property="og:updated_time" content="2018-02-07T04:38:43.894Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
 <meta name="twitter:description" content="一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：">
@@ -174,7 +174,8 @@
 <li>网页需要根据发送的url产生响应，并返回html响应页面。</li>
 <li>判断返回得结果是否是我们所需要的</li>
 <li>解析返回得html页面</li>
-<li>将解析的数据打包，写入本地磁盘<br>&lt;–! more –&gt;</li>
+<li>将解析的数据打包，写入本地磁盘<a id="more"></a>
+</li>
 </ol>
 <h2 id="三、解决方案"><a href="#三、解决方案" class="headerlink" title="三、解决方案"></a>三、解决方案</h2><p>本示例测试了对“编程吧”的信息进行抓取。<br>1、使用到的jar包，主要有</p>
 <ul>
