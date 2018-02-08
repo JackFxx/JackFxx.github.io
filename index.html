@@ -165,12 +165,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="Linux常用命令（二）"><a href="#Linux常用命令（二）" class="headerlink" title="Linux常用命令（二）"></a>Linux常用命令（二）</h2><p>本篇是继上篇博文的内容的完善。<br><a href="http://blog.csdn.net/jackFXX/article/details/79262746" target="_blank" rel="noopener">Linux常用命令总结（一）</a>                    </p>
-<h2 id="一、history命令"><a href="#一、history命令" class="headerlink" title="一、history命令"></a>一、history命令</h2><p>history [选项] [历史命令保存文件]<br>选项：<br>     -c：清空历史命令<br>     -w：把缓存中的历史命令写入历史命令保存文件 ~./bash_history</p>
-<h2 id="二、输出输入重定向"><a href="#二、输出输入重定向" class="headerlink" title="二、输出输入重定向"></a>二、输出输入重定向</h2><ol>
-<li><p>输出重定向：</p>
-<p>  <img src="http://img.blog.csdn.net/2018020814471315?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="输出重定向"></p>
-</li>
-<li><p>输入重定向：<br>wc [选项] [文件名]<br>选项：<br>-c：统计字节数<br>-w：统计单词数<br>-l：统计行数</p>
+<h2 id="一、history命令"><a href="#一、history命令" class="headerlink" title="一、history命令"></a>一、history命令</h2><p>history [选项] [历史命令保存文件]<br>选项：<br>     -c：清空历史命令<br>     -w：把缓存中的历史命令写入历史命令保存文件 ~./bash_history<br>
         
           <a class="article-more-a" href="/2018/02/08/Linux常用命令总结（二）/#more">more >></a>
         
@@ -220,7 +215,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、灵感来源"><a href="#一、灵感来源" class="headerlink" title="一、灵感来源"></a>一、灵感来源</h2><p>前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发）</p>
+        <h2 id="使用jsoup和httpclient编写的简单爬虫工具"><a href="#使用jsoup和httpclient编写的简单爬虫工具" class="headerlink" title="使用jsoup和httpclient编写的简单爬虫工具"></a>使用jsoup和httpclient编写的简单爬虫工具</h2><h2 id="一、灵感来源"><a href="#一、灵感来源" class="headerlink" title="一、灵感来源"></a>一、灵感来源</h2><p>前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发）</p>
 <h2 id="二、需求分析"><a href="#二、需求分析" class="headerlink" title="二、需求分析"></a>二、需求分析</h2><p>首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：</p>
 <ol>
 <li>爬取网页数据，那么必然要知道网页的Url，这是我们抓取数据的入口</li>

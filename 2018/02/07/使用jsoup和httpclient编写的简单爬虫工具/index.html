@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：">
+  <meta name="description" content="使用jsoup和httpclient编写的简单爬虫工具一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
 <meta property="og:url" content="http://yoursite.com/2018/02/07/使用jsoup和httpclient编写的简单爬虫工具/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：">
+<meta property="og:description" content="使用jsoup和httpclient编写的简单爬虫工具一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便">
 <meta property="og:locale" content="zh-Hanz">
 <meta property="og:image" content="http://img.blog.csdn.net/20180207115149376?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20180207121408456?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20180207121431606?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2018-02-07T04:38:43.894Z">
+<meta property="og:updated_time" content="2018-02-08T07:26:57.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：">
+<meta name="twitter:description" content="使用jsoup和httpclient编写的简单爬虫工具一、灵感来源前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发） 二、需求分析首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20180207115149376?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
@@ -167,7 +167,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、灵感来源"><a href="#一、灵感来源" class="headerlink" title="一、灵感来源"></a>一、灵感来源</h2><p>前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发）</p>
+        <h2 id="使用jsoup和httpclient编写的简单爬虫工具"><a href="#使用jsoup和httpclient编写的简单爬虫工具" class="headerlink" title="使用jsoup和httpclient编写的简单爬虫工具"></a>使用jsoup和httpclient编写的简单爬虫工具</h2><h2 id="一、灵感来源"><a href="#一、灵感来源" class="headerlink" title="一、灵感来源"></a>一、灵感来源</h2><p>前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发）</p>
 <h2 id="二、需求分析"><a href="#二、需求分析" class="headerlink" title="二、需求分析"></a>二、需求分析</h2><p>首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：</p>
 <ol>
 <li>爬取网页数据，那么必然要知道网页的Url，这是我们抓取数据的入口</li>
