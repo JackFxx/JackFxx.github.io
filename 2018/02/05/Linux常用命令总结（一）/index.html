@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
 <meta property="og:description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录：    mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）  2.切换目录：    cd 目录名   cd ~ / cd回到家目录   cd - 回到上次目录   cd ..回到上级目录   c">
 <meta property="og:locale" content="zh-Hanz">
-<meta property="og:updated_time" content="2018-02-08T07:22:27.161Z">
+<meta property="og:updated_time" content="2018-02-24T11:47:01.148Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
 <meta name="twitter:description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录：    mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）  2.切换目录：    cd 目录名   cd ~ / cd回到家目录   cd - 回到上次目录   cd ..回到上级目录   c">
@@ -188,7 +188,7 @@
 <p>  /：根目录<br>/bin：系统命令保存目录（/bin和/usr/bin普通用户就可以读取的命令 /sbin和/usr/sbin超级用户才能访问）<br>/boot：系统启动目录<br>/lib：系统函数库保存目录<br>/etc：系统配置文件保存目录<br>/dev：特殊设备文件保存目录<br>/usr：系统软件资源存储目录<br>/mnt /media /misc：系统挂载目录（初始为空，用于外界存储设备的盘符）<br>/home：普通用户的家<br>/root：超级用户的家<br>/tmp：临时目录<br>/proc /sys：系统内存目录<br>/var：系统相关文档的目录</p>
 </li>
 <li><p>8.链接命令:</p>
-<p>Ln -s [源文件] [目标文件]<br>功能：生成链接文件<br>选项：-s 创建软链接<br>硬链接特征：<br>a.拥有相同的i节点和block块，可以看做同一个文件<br>b.可通过i节点识别<br>c.不能跨分区<br>d.不可针对目录使用<br>软链接特征：<br>a.类似windows的快捷方式<br>b.独立拥有自己的I节点和Block块，但是数据块中只保存源文件的文件名和I节点号，并没有实际的文件数据<br>c.3软链接权限都为 lrwxrwxrwx<br>d.修改任意文件，另一个也改变<br>e.删除源文件，软链接不能使用</p>
+<p>ln -s [源文件] [目标文件]<br>功能：生成链接文件<br>选项：-s 创建软链接<br>硬链接特征：<br>a.拥有相同的i节点和block块，可以看做同一个文件<br>b.可通过i节点识别<br>c.不能跨分区<br>d.不可针对目录使用<br>软链接特征：<br>a.类似windows的快捷方式<br>b.独立拥有自己的I节点和Block块，但是数据块中只保存源文件的文件名和I节点号，并没有实际的文件数据<br>c.3软链接权限都为 lrwxrwxrwx<br>d.修改任意文件，另一个也改变<br>e.删除源文件，软链接不能使用</p>
 </li>
 </ul>
 <h2 id="二、文件搜索"><a href="#二、文件搜索" class="headerlink" title="二、文件搜索"></a>二、文件搜索</h2><ul>
@@ -202,7 +202,7 @@
 </li>
 <li><p>4.文件搜索命令find（最强大的搜索命令，遍历系统的所有路径进行查找）:<br>find [搜索范围] [搜索条件]<br>避免大范围搜索！find是使用通配符进行完全匹配（搜索条件和结果完全相同）。<br>Linux中的通配符：<br>  ：匹配任意内容 find /root “a*”<br>[]：匹配任意一个中括号中的字符 find /root -name “ab[cd]”<br> ?：匹配任意一个字符 find /root “ab?”<br>find [搜索范围] -iname [搜索条件] 不区分大小写<br>find [搜索范围] -user [搜索条件] 按照所有者<br>find [搜索范围] -nouser [搜索条件] 查找没有所有者的文件<br>find /var/log/ -[选项] [时间]<br>选项：<br>  atime：文件访问时间<br>  ctime：改变文件属性<br>  mtime：修改文件内容<br>时间：<br>  -10：10天内修改文件<br>  10：10天当天修改文件<br>  +10：10天前修改文件<br>find . -size 25k/25M 按照文件大小搜索文件<br>选项：<br>  -25k：小于25KB的文件<br>  25k：等于25KB的文件<br>  +25k：大于25KB的文件<br>find . -inum [i节点号] 按照i节点号搜索<br>find [搜索范围] -size +25k -a -size -50k [操作] 查找指定目录下的大于25KB小于50KB的文件<br>选项：<br>  -a：逻辑与<br>  -o：逻辑或<br>操作：<br>  -exec -ok 命令 {} \;：对搜索结果执行操作，如： -exec ls -lh {} \;显示查询结果的详细信息</p>
 </li>
-<li>4.字符串搜索命令grep：<br>grep [选项] 字符串 文件名（在文件当中匹配符合条件的字符串）<br>选项：<br>  -v：排除指定字符串<br>  -i：忽略大小写<br>使用通配符和正则表达式进行包含匹配</li>
+<li>5.字符串搜索命令grep：<br>grep [选项] 字符串 文件名（在文件当中匹配符合条件的字符串）<br>选项：<br>  -v：排除指定字符串<br>  -i：忽略大小写<br>使用通配符和正则表达式进行包含匹配</li>
 </ul>
 <h2 id="三、帮助命令"><a href="#三、帮助命令" class="headerlink" title="三、帮助命令"></a>三、帮助命令</h2><p>man:<br>man 命令：获取指定命令的帮助<br>man的级别：<br>              1：命令的帮助<br>              2：可被内核调用的函数的帮助<br>              3：函数和函数库的帮助<br>              4：特殊文件的帮助<br>              5：配置文件的帮助<br>              6：游戏的帮助<br>              7：其他选项的帮助<br>              8：系统管理员可用命令的帮助<br>              9：和内核相关文件的帮助</p>
 <h2 id="四、压缩与解压"><a href="#四、压缩与解压" class="headerlink" title="四、压缩与解压"></a>四、压缩与解压</h2><ul>
