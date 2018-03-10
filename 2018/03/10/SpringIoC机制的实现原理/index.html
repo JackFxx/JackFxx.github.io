@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | MrFuJack&#39;Blog</title>
+  <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="灵感源于生活">
-<meta property="og:type" content="website">
+  <meta name="description" content="一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及其价值 设计理念：在JavaEE">
+<meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/03/10/SpringIoC机制的实现原理/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="灵感源于生活">
+<meta property="og:description" content="一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及其价值 设计理念：在JavaEE">
 <meta property="og:locale" content="zh-Hanz">
+<meta property="og:image" content="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-03-10T07:57:51.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="灵感源于生活">
+<meta name="twitter:description" content="一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及其价值 设计理念：在JavaEE">
+<meta name="twitter:image" content="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -157,106 +160,177 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-SpringIoC机制的实现原理" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？   </p>
+<h2 id="二、Spring的设计理念及其价值"><a href="#二、Spring的设计理念及其价值" class="headerlink" title="二、Spring的设计理念及其价值"></a>二、Spring的设计理念及其价值</h2><p> 设计理念：在JavaEE的应用开发中，支持POJO和使用JavaBean的开发方式，使应用面向接口开发，充分支持面向对象的设计方法。<br> 价值：</p>
+<ol>
+<li>Spring是一个非侵入性的框架，其目标是使应用程序代码对框架的依赖最小化，应用代码可以在没有spring或其它容器的情况下正常运行。</li>
+<li>Spring提供了一个一致的编程模型，使应用直接使用POJO开发，从而可以与运行环境隔离开来。</li>
+<li>Spring推动应用的设计风格面向对象及面向接口编程得转变，提高了代码的重用性和可测试性。</li>
+<li>Spring改进了体系结构的选择，可以帮助我们选择不同的技术实现。 <a id="more"></a>
+三、Spring Framework的核心：IoC容器的实现</li>
+</ol>
+<hr>
+<p>依赖注入的方式：接口注入、setter注入和构造器注入。<br>主要的容器系列：</p>
+<p>  a. 实现BeanFactory接口的简单容器系列，只实现了容器最基本的功能。<br>  b. 容器的高级存在形态，ApplicationContext应用上下文。</p>
+<p>Spring通过定义BeanDefinition来管理基于spring的应用中各种对象以及它们相互之间的依赖关系。BeanDefinition是让容器起作用的主要数据类型，对IoC容器来说，BeanDefinition就是对依赖反转模式中管理的对象依赖关系的数据抽象，是容器实现依赖反转功能的核心数据结构。</p>
+<ol>
+<li><p>BeanFactory和FactoryBean   </p>
+<pre><code>BeanFactory，以Factory结尾，表示它是一个工厂类(接口)，用于管理Bean的一个工厂。在Spring中，BeanFactory是IOC容器的核心接口，它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。FactoryBean是实现了FactoryBean&lt;T&gt;接口的Bean，根据该Bean的ID从BeanFactory中获取的实际上是FactoryBean的getObject()返回的对象，而不是FactoryBean本身，如果要获取FactoryBean对象，请在id前面加一个&amp;符号来获取
+</code></pre></li>
+<li><p>BeanFactory容器的设计原理</p>
+<pre><code>以XmlBeanFactory为例：XmlBeanFactory继承自DefaultListableBeanFactory，在Spring中，DefaultListableBeanFactory常被作为一个默认的功能完成IoC容器使用。在XmlBeanFactory中，初始化了一个XmlBeanDefinitionReader对象，用于读取Xml文件的信息。构造XmlBeanFactory容器时，需要制定BeanDifinition的信息来源，这个信息来源需要封装成Spring的Resource类来给出。
+</code></pre><p>使用IoC容器的步骤：<br>1)：创建IoC配置文件的抽象资源，其中包含了BeanDefinition的定义信息<br>2)：创建一个BeanFactory<br>3)：创建一个载入BeanDefinition的容器<br>4)：把定义好的资源文件位置读入配置信息。其中包括解析，载入和注册的过程。<br>示例如下：<br><img src="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="1-1"></p>
+</li>
+<li><p>ApplicationContext的设计原理      ApplicationContext所具备的新特性：<br>1)：支持不同的信息源<br> 2)：提供灵活的访问资源途径<br>   3)：支持应用事件 </p>
+<pre><code>4)：在Application中提供附加功能
+      以FileSystemXmlApplicationContext为例，两个功能： 
+      1)：如果应用直接使用FileSystemXmlApplicationContext，对于实例化这个应用上下文的支持，同时启动IoC容器的refresh()过程。
+</code></pre><p>2)：为在文件系统中读取以XML形式存在的BeanDefinition做准备。</p>
+</li>
+<li><p>IoC容器的初始化过程<br> IoC容器的初始化过程由refresh()方法来启动，这个方法标志着IoC容器正式启动，过程如下：<br>1)：BeanDefinition的Resource定位。其指的是BeanDefinition的资源定位，它由ResourceLoader通过统一的Resource接口完成，为后续过程创造了I/O操作的条件。类似于在容器中寻找数据的过程，就像用水桶（IoC容器）装水时，先要把水找到。<br>2)：BeanDifinition的载入和解析。把用户定义好的Bean表示成IoC容器的内部数据结构，即BeanDefinition,具体的载入过程由BeanDefinitionReader完成，解析过程由BeanDefinitionParserDelegate完成。BeanDefinition实际上就是POJO对象在IoC容器中的抽象，通过此数据结构，可以使IoC容器能够方便地对POJO对象也就是Bean进行管理。<br>3)：向IoC容器注册BeanDefinition。通过调用BeanDifinitionRegistry接口的实现完成。此过程把载入过程中解析得到的BeanDefinition向容器中进行注册。实际上是把BeanDefinition注册到一个HashMap中，IoC容器通过这个HashMap来持有这些BeanDefinition的数据。</p>
+<pre><code>IoC容器初始化过程中，一般不包括Bean依赖注入的实现。在SpringIoC的设计中，Bean定义的载入和依赖注入是两个独立的过程。依赖注入一般发生在应用第一次通过getBean向容器中索取Bean的时候。
+</code></pre></li>
+<li><p>IoC容器的依赖注入<br>1)：IoC容器初始化的过程完成的主要功能是在IoC容器中建立BeanDefinition的数据映射。此过程之后，紧接着的就是对Bean的依赖关系进行注入。依赖注入的过程是用户第一次向IoC容器索要bean时触发的（当然也有例外，可以通过在BeanDefinition信息中控制lazy-init属性来让容器完成的Bean的预实例化），当用户向IoC容器索要Bean时，在BeanFactory中的getBean()接口定义，这是触发依赖注入发生的地方。getBean是依赖注入的起点，之后会调用createBean。在这个过程中，Bean对象会依据BeanDefinition定义的要求生成，createBean不但生成了需要的Bean，还对Bean的初始化进行了处理，如实现了在BeanDefinition中的init-method属性定义，Bean后置处理器等。Bean对象生成之后，设置各个对象之间的依赖关系，通过使用BeanDefinitionResolver来对BeanDefinition进行解析，然后注入到property中。<br>2)：Strategy类是Spring用来生成Bean对象的默认类，它提供了两种实例化Java对象的方法，一种是通过BeanUtils，它使用了JVM的反射功能，一种是通过CGLIB（字节码生成器的类库 ）来实现。</p>
+</li>
+<li><p>Bean的生命周期<br>1)：Beam实例的创建<br>2)：为Bean实例设置属性<br>3)：调用Bean的初始化方法<br>4)：应用可以通过IoC容器使用Bean<br>5)：当容器关闭时，调用Bean的销毁方法</p>
+</li>
+<li><p>autowiring（自动依赖装配）的实现<br>autowiring属性在对Bean属性进行依赖注入时起作用。对此属性进行处理，从而完成对Bean属性的自动依赖装配，是在populateBean中实现的。在此实现中，处理一般的Bean之前，先对autowiring属性进行处理。如果当前的Bean配置了autowire_by_name和autowire_by_type属性，则调用相应的autowireByName和autowireByType。对于autowire_by_name，它首先通过反射机制从当前Bean中得到需要注入的属性名，然后使用这个属性名向容器申请与之同名的Bean，这样实际又触发了另一个Bean的生成和依赖注入的过程。</p>
+</li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/10/SpringIoC机制的实现原理/" class="archive-article-date">
-  	<time datetime="2018-03-10T07:37:04.221Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-10</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/03/10/SpringIoC机制的实现原理/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/08/Linux常用命令总结（二）/" class="archive-article-date">
-  	<time datetime="2018-02-08T07:20:58.924Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-08</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/07/使用jsoup和httpclient编写的简单爬虫工具/" class="archive-article-date">
-  	<time datetime="2018-02-07T04:27:06.996Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+  
+    <a href="/2018/02/08/Linux常用命令总结（二）/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/05/Linux常用命令总结（一）/" class="archive-article-date">
-  	<time datetime="2018-02-05T09:56:33.239Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-05</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+        
+    </div>
+</aside>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -279,8 +353,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
