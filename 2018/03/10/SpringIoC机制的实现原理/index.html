@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及其价值 设计理念：在JavaEE">
+  <meta name="description" content="SpringIoC机制的实现原理（二）一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
 <meta property="og:url" content="http://yoursite.com/2018/03/10/SpringIoC机制的实现原理/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及其价值 设计理念：在JavaEE">
+<meta property="og:description" content="SpringIoC机制的实现原理（二）一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计">
 <meta property="og:locale" content="zh-Hanz">
 <meta property="og:image" content="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2018-03-10T07:57:51.571Z">
+<meta property="og:updated_time" content="2018-03-10T08:01:59.606Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及其价值 设计理念：在JavaEE">
+<meta name="twitter:description" content="SpringIoC机制的实现原理（二）一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计">
 <meta name="twitter:image" content="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
@@ -165,13 +165,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？   </p>
-<h2 id="二、Spring的设计理念及其价值"><a href="#二、Spring的设计理念及其价值" class="headerlink" title="二、Spring的设计理念及其价值"></a>二、Spring的设计理念及其价值</h2><p> 设计理念：在JavaEE的应用开发中，支持POJO和使用JavaBean的开发方式，使应用面向接口开发，充分支持面向对象的设计方法。<br> 价值：</p>
+        <h2 id="SpringIoC机制的实现原理（二）"><a href="#SpringIoC机制的实现原理（二）" class="headerlink" title="SpringIoC机制的实现原理（二）"></a>SpringIoC机制的实现原理（二）</h2><h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？   </p>
+<h2 id="二、Spring的设计理念及其价值"><a href="#二、Spring的设计理念及其价值" class="headerlink" title="二、Spring的设计理念及其价值"></a>二、Spring的设计理念及其价值</h2><p> 设计理念：在JavaEE的应用开发中，支持POJO和使用JavaBean的开发方式，使应用面向接口开发，充分支持面向对象的设计方法。<br>      <a id="more"></a><br> 价值：</p>
 <ol>
 <li>Spring是一个非侵入性的框架，其目标是使应用程序代码对框架的依赖最小化，应用代码可以在没有spring或其它容器的情况下正常运行。</li>
 <li>Spring提供了一个一致的编程模型，使应用直接使用POJO开发，从而可以与运行环境隔离开来。</li>
 <li>Spring推动应用的设计风格面向对象及面向接口编程得转变，提高了代码的重用性和可测试性。</li>
-<li>Spring改进了体系结构的选择，可以帮助我们选择不同的技术实现。 <a id="more"></a>
+<li>Spring改进了体系结构的选择，可以帮助我们选择不同的技术实现。 <!-- more -->
 三、Spring Framework的核心：IoC容器的实现</li>
 </ol>
 <hr>

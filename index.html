@@ -164,13 +164,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？   </p>
-<h2 id="二、Spring的设计理念及其价值"><a href="#二、Spring的设计理念及其价值" class="headerlink" title="二、Spring的设计理念及其价值"></a>二、Spring的设计理念及其价值</h2><p> 设计理念：在JavaEE的应用开发中，支持POJO和使用JavaBean的开发方式，使应用面向接口开发，充分支持面向对象的设计方法。<br> 价值：</p>
-<ol>
-<li>Spring是一个非侵入性的框架，其目标是使应用程序代码对框架的依赖最小化，应用代码可以在没有spring或其它容器的情况下正常运行。</li>
-<li>Spring提供了一个一致的编程模型，使应用直接使用POJO开发，从而可以与运行环境隔离开来。</li>
-<li>Spring推动应用的设计风格面向对象及面向接口编程得转变，提高了代码的重用性和可测试性。</li>
-<li>Spring改进了体系结构的选择，可以帮助我们选择不同的技术实现。
+        <h2 id="SpringIoC机制的实现原理（二）"><a href="#SpringIoC机制的实现原理（二）" class="headerlink" title="SpringIoC机制的实现原理（二）"></a>SpringIoC机制的实现原理（二）</h2><h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？   </p>
+<h2 id="二、Spring的设计理念及其价值"><a href="#二、Spring的设计理念及其价值" class="headerlink" title="二、Spring的设计理念及其价值"></a>二、Spring的设计理念及其价值</h2><p> 设计理念：在JavaEE的应用开发中，支持POJO和使用JavaBean的开发方式，使应用面向接口开发，充分支持面向对象的设计方法。<br>
         
           <a class="article-more-a" href="/2018/03/10/SpringIoC机制的实现原理/#more">more >></a>
         
