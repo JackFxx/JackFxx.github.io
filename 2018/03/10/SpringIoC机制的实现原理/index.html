@@ -16,7 +16,7 @@
 <meta property="og:description" content="SpringIoC机制的实现原理一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及">
 <meta property="og:locale" content="zh-Hanz">
 <meta property="og:image" content="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2018-03-12T03:37:45.394Z">
+<meta property="og:updated_time" content="2018-03-12T08:33:47.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
 <meta name="twitter:description" content="SpringIoC机制的实现原理一、为什么要使用Spring？Spring的设计目标在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？    二、Spring的设计理念及">
@@ -176,21 +176,17 @@
 </ol>
 <hr>
 <p>依赖注入的方式：接口注入、setter注入和构造器注入。<br>主要的容器系列：</p>
-<p>  a. 实现BeanFactory接口的简单容器系列，只实现了容器最基本的功能。<br>  b. 容器的高级存在形态，ApplicationContext应用上下文。</p>
-<p>Spring通过定义BeanDefinition来管理基于spring的应用中各种对象以及它们相互之间的依赖关系。BeanDefinition是让容器起作用的主要数据类型，对IoC容器来说，BeanDefinition就是对依赖反转模式中管理的对象依赖关系的数据抽象，是容器实现依赖反转功能的核心数据结构。</p>
+<p>  a. 实现BeanFactory接口的简单容器系列，只实现了容器最基本的功能。<br>  b. 容器的高级存在形态，ApplicationContext应用上下文。<br>Spring通过定义BeanDefinition来管理基于spring的应用中各种对象以及它们相互之间的依赖关系。BeanDefinition是让容器起作用的主要数据类型，对IoC容器来说，BeanDefinition就是对依赖反转模式中管理的对象依赖关系的数据抽象，是容器实现依赖反转功能的核心数据结构。</p>
 <ol>
-<li><p>BeanFactory和FactoryBean   </p>
-<pre><code>BeanFactory，以Factory结尾，表示它是一个工厂类(接口)，用于管理Bean的一个工厂。在Spring中，BeanFactory是IOC容器的核心接口，它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。FactoryBean是实现了FactoryBean&lt;T&gt;接口的Bean，根据该Bean的ID从BeanFactory中获取的实际上是FactoryBean的getObject()返回的对象，而不是FactoryBean本身，如果要获取FactoryBean对象，请在id前面加一个&amp;符号来获取
-</code></pre></li>
-<li><p>BeanFactory容器的设计原理</p>
-<pre><code>以XmlBeanFactory为例：XmlBeanFactory继承自DefaultListableBeanFactory，在Spring中，DefaultListableBeanFactory常被作为一个默认的功能完成IoC容器使用。在XmlBeanFactory中，初始化了一个XmlBeanDefinitionReader对象，用于读取Xml文件的信息。构造XmlBeanFactory容器时，需要制定BeanDifinition的信息来源，这个信息来源需要封装成Spring的Resource类来给出。
-</code></pre><p>使用IoC容器的步骤：<br>1)：创建IoC配置文件的抽象资源，其中包含了BeanDefinition的定义信息<br>2)：创建一个BeanFactory<br>3)：创建一个载入BeanDefinition的容器<br>4)：把定义好的资源文件位置读入配置信息。其中包括解析，载入和注册的过程。<br>示例如下：<br><img src="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="1-1"></p>
+<li><p>BeanFactory和FactoryBean<br>BeanFactory，以Factory结尾，表示它是一个工厂类(接口)，用于管理Bean的一个工厂。在Spring中，BeanFactory是IOC容器的核心接口，它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。FactoryBean是实现了FactoryBean<t>接口的Bean，根据该Bean的ID从BeanFactory中获取的实际上是FactoryBean的getObject()返回的对象，而不是FactoryBean本身，如果要获取FactoryBean对象，请在id前面加一个&amp;符号来获取    </t></p>
 </li>
-<li><p>ApplicationContext的设计原理      ApplicationContext所具备的新特性：<br>1)：支持不同的信息源<br> 2)：提供灵活的访问资源途径<br> 3)：支持应用事件<br> 4)：在Application中提供附加功能</p>
+<li><p>BeanFactory容器的设计原理<br>以XmlBeanFactory为例：XmlBeanFactory继承自DefaultListableBeanFactory，在Spring中，DefaultListableBeanFactory常被作为一个默认的功能完成IoC容器使用。在XmlBeanFactory中，初始化了一个XmlBeanDefinitionReader对象，用于读取Xml文件的信息。构造XmlBeanFactory容器时，需要制定BeanDifinition的信息来源，这个信息来源需要封装成Spring的Resource类来给出。<br>使用IoC容器的步骤：<br>1)：创建IoC配置文件的抽象资源，其中包含了BeanDefinition的定义信息<br>2)：创建一个BeanFactory<br>3)：创建一个载入BeanDefinition的容器<br>4)：把定义好的资源文件位置读入配置信息。其中包括解析，载入和注册的过程。<br>示例如下：<br><img src="http://img.blog.csdn.net/2018031015190592?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="1-1"></p>
+</li>
+<li><p>ApplicationContext的设计原理<br>ApplicationContext所具备的新特性：<br>1)：支持不同的信息源<br> 2)：提供灵活的访问资源途径<br> 3)：支持应用事件<br> 4)：在Application中提供附加功能</p>
 <pre><code>以FileSystemXmlApplicationContext为例，两个功能： 
 </code></pre><p>   1)：如果应用直接使用FileSystemXmlApplicationContext，对于实例化这个应用上下文的支持，同时启动IoC容器的refresh()过程。<br>   2)：为在文件系统中读取以XML形式存在的BeanDefinition做准备。</p>
 </li>
-<li><p>IoC容器的初始化过程<br> IoC容器的初始化过程由refresh()方法来启动，这个方法标志着IoC容器正式启动，过程如下：<br>1)：BeanDefinition的Resource定位。其指的是BeanDefinition的资源定位，它由ResourceLoader通过统一的Resource接口完成，为后续过程创造了I/O操作的条件。类似于在容器中寻找数据的过程，就像用水桶（IoC容器）装水时，先要把水找到。<br>2)：BeanDifinition的载入和解析。把用户定义好的Bean表示成IoC容器的内部数据结构，即BeanDefinition,具体的载入过程由BeanDefinitionReader完成，解析过程由BeanDefinitionParserDelegate完成。BeanDefinition实际上就是POJO对象在IoC容器中的抽象，通过此数据结构，可以使IoC容器能够方便地对POJO对象也就是Bean进行管理。<br>3)：向IoC容器注册BeanDefinition。通过调用BeanDifinitionRegistry接口的实现完成。此过程把载入过程中解析得到的BeanDefinition向容器中进行注册。实际上是把BeanDefinition注册到一个HashMap中，IoC容器通过这个HashMap来持有这些BeanDefinition的数据。<br>   IoC容器初始化过程中，一般不包括Bean依赖注入的实现。在SpringIoC的设计中，Bean定义的载入和依赖注入是两个独立的过程。依赖注入一般发生在应用第一次通过getBean向容器中索取Bean的时候。</p>
+<li><p>IoC容器的初始化过程<br> IoC容器的初始化过程由refresh()方法来启动，这个方法标志着IoC容器正式启动，过程如下：<br>1)：BeanDefinition的Resource定位。其指的是BeanDefinition的资源定位，它由ResourceLoader通过统一的Resource接口完成，为后续过程创造了I/O操作的条件。类似于在容器中寻找数据的过程，就像用水桶（IoC容器）装水时，先要把水找到。<br>2)：BeanDifinition的载入和解析。把用户定义好的Bean表示成IoC容器的内部数据结构，即BeanDefinition,具体的载入过程由BeanDefinitionReader完成，解析过程由BeanDefinitionParserDelegate完成。BeanDefinition实际上就是POJO对象在IoC容器中的抽象，通过此数据结构，可以使IoC容器能够方便地对POJO对象也就是Bean进行管理。<br>3)：向IoC容器注册BeanDefinition。通过调用BeanDifinitionRegistry接口的实现完成。此过程把载入过程中解析得到的BeanDefinition向容器中进行注册。实际上是把BeanDefinition注册到一个HashMap中，IoC容器通过这个HashMap来持有这些BeanDefinition的数据。<br>IoC容器初始化过程中，一般不包括Bean依赖注入的实现。在SpringIoC的设计中，Bean定义的载入和依赖注入是两个独立的过程。依赖注入一般发生在应用第一次通过getBean向容器中索取Bean的时候。</p>
 </li>
 <li><p>IoC容器的依赖注入<br>1)：IoC容器初始化的过程完成的主要功能是在IoC容器中建立BeanDefinition的数据映射。此过程之后，紧接着的就是对Bean的依赖关系进行注入。依赖注入的过程是用户第一次向IoC容器索要bean时触发的（当然也有例外，可以通过在BeanDefinition信息中控制lazy-init属性来让容器完成的Bean的预实例化），当用户向IoC容器索要Bean时，在BeanFactory中的getBean()接口定义，这是触发依赖注入发生的地方。getBean是依赖注入的起点，之后会调用createBean。在这个过程中，Bean对象会依据BeanDefinition定义的要求生成，createBean不但生成了需要的Bean，还对Bean的初始化进行了处理，如实现了在BeanDefinition中的init-method属性定义，Bean后置处理器等。Bean对象生成之后，设置各个对象之间的依赖关系，通过使用BeanDefinitionResolver来对BeanDefinition进行解析，然后注入到property中。<br>2)：Strategy类是Spring用来生成Bean对象的默认类，它提供了两种实例化Java对象的方法，一种是通过BeanUtils，它使用了JVM的反射功能，一种是通过CGLIB（字节码生成器的类库 ）来实现。</p>
 </li>
