@@ -159,6 +159,81 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-谈谈Mybatis的原理及其工作流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Mybatis的介绍"><a href="#一、Mybatis的介绍" class="headerlink" title="一、Mybatis的介绍"></a>一、Mybatis的介绍</h2><p>   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？<br>       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。<br>      <img src="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h2 id="二、Mybatis的原理及其工作流程"><a href="#二、Mybatis的原理及其工作流程" class="headerlink" title="二、Mybatis的原理及其工作流程"></a>二、Mybatis的原理及其工作流程</h2><pre><code>&lt;!-- more --&gt;
+</code></pre><ol>
+<li><p>读取mybatis全局配置文件</p>
+<p>   将定义好的mybatis全局配置文件进行读取，并包装称为一个InputStream对象。这个比较简单，就不详细分析</p>
+</li>
+</ol>
+<ol>
+<li><p>解析配置文件</p>
+<p>   由SqlSessionFactoryBuilder类的bulid方法驱动，对包装好的XML文件进行解析。很容易看到，其具体的解析任务是交给XMLConfigBuilder对象完成，<img src="https://img-blog.csdn.net/20180512142623819?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>   并将读取的数据存入Configuration的对象中<img src="https://img-blog.csdn.net/20180512142902343?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>   Configuration作为解析配置文件过程中，最重要的一个类，它的作用主要如下：<br>a.读入配置文件</p>
+<pre><code> b.提供单例，为后续创建SessionFactory服务提供配置参数
+c. 初始化配置信息
+</code></pre><p>  Mybatis的几乎所有配置文件信息都是存储在由XMLConfigBuilder构建的Configuration对象中，那么它是如何去构建的，如下：<img src="https://img-blog.csdn.net/20180512143749315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><img src="https://img-blog.csdn.net/20180512143756884?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述">到此，Configuration对象创建并注入完成。</p>
+</li>
+</ol>
+<ol>
+<li><p>SqlSessionFactory对象的创建</p>
+<p>  让我们继续回到<img src="https://img-blog.csdn.net/20180512144136490?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>  由前文知道，parser.parser()会返回构建并注入好的Configuration对象，可见SqlSessionFactory对象与Configuration有着必然的关联。<img src="https://img-blog.csdn.net/20180512144355312?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述">SqlSessionFactory对象由DefaultSessionFactory根据Configuration的信息去创建。</p>
+</li>
+<li><p>SqlSession的对象的创建</p>
+<p>  由于前面所创建的SqlSessionFactory是一个接口，因此SqlSession对象的创建交给了SqlSessionFactory的实现类DefalutSqlSessionFactory完成。<img src="https://img-blog.csdn.net/20180512144825443?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"> 这里同样适用到了前面所创建的Configuration对象的配置信息，继续往下<img src="https://img-blog.csdn.net/20180512145058907?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"> 这里我们需要重点关注的是Executor对象，这是SqlSession对象去访问数据库的执行器，每一个SqlSession对象都维持着这样一个Executor。到此SqlSession对象创建完成，可以开始对数据库进行访问了。</p>
+</li>
+</ol>
+<ol>
+<li><p>SqlSession的执行过程</p>
+<p>  由于SqlSession同样是一个接口，因此具体的任务交给它的实现类DefaultSqlSession完成<img src="https://img-blog.csdn.net/20180512145830917?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"> 这里同样用到了Configuration对象的信息。继续往下：<img src="https://img-blog.csdn.net/20180512154819143?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述">这里采用了动态代理技术，继续往下：<img src="https://img-blog.csdn.net/20180512155228622?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述">代理类的具体操作封装在invoke()方法之中，由此可见，SqlSession对结果进行了缓存，并封装在一个HashMap之中，其中key为sql语句，value为查询结果。到此整个流程执行完成。</p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/12/谈谈Mybatis的原理及其工作流程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-SpringIoC机制的实现原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
