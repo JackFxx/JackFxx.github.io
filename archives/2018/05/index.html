@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>MrFuJack&#39;Blog</title>
+  <title>Archives: 2018/5 | MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="灵感源于生活">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/archives/2018/05/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
 <meta property="og:description" content="灵感源于生活">
 <meta property="og:locale" content="zh-Hanz">
@@ -159,294 +159,41 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-谈谈Mybatis的原理及其工作流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-    <div class="article-entry" itemprop="articleBody">
+    
       
-        <h2 id="一、Mybatis的介绍"><a href="#一、Mybatis的介绍" class="headerlink" title="一、Mybatis的介绍"></a>一、Mybatis的介绍</h2><p>   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？<br>       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。<br>      <img src="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<h2 id="二、Mybatis的原理及其工作流程"><a href="#二、Mybatis的原理及其工作流程" class="headerlink" title="二、Mybatis的原理及其工作流程"></a>二、Mybatis的原理及其工作流程</h2><ol>
-<li><p>读取mybatis全局配置文件</p>
-<p>   将定义好的mybatis全局配置文件进行读取，并包装称为一个InputStream对象。这个比较简单，就不详细分析</p>
-</li>
-</ol>
-<ol>
-<li><p>解析配置文件</p>
-<p>   由SqlSessionFactoryBuilder类的bulid方法驱动，对包装好的XML文件进行解析。很容易看到，其具体的解析任务是交给XMLConfigBuilder对象完成，<img src="https://img-blog.csdn.net/20180512142623819?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>   并将读取的数据存入Configuration的对象中<img src="https://img-blog.csdn.net/20180512142902343?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>   Configuration作为解析配置文件过程中，最重要的一个类，它的作用主要如下：<br>a.读入配置文件<br>b.提供单例，为后续创建SessionFactory服务提供配置参数<br>c. 初始化配置信息</p>
-<p>  Mybatis的几乎所有配置文件信息都是存储在由XMLConfigBuilder构建的Configuration对象中，那么它是如何去构建的，如下：<img src="https://img-blog.csdn.net/20180512143749315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><img src="https://img-blog.csdn.net/20180512143756884?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m1">到此，Configuration对象创建并注入完成。</p>
-</li>
-</ol>
-<ol>
-<li><p>SqlSessionFactory对象的创建</p>
-<p>  让我们继续回到<img src="https://img-blog.csdn.net/20180512144136490?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m2"><br>  由前文知道，parser.parser()会返回构建并注入好的Configuration对象，可见SqlSessionFactory对象与Configuration有着必然的关联。<img src="https://img-blog.csdn.net/20180512144355312?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m3">SqlSessionFactory对象由DefaultSessionFactory根据Configuration的信息去创建。</p>
-</li>
-<li><p>SqlSession的对象的创建</p>
-<p>  由于前面所创建的SqlSessionFactory是一个接口，因此SqlSession对象的创建交给了SqlSessionFactory的实现类DefalutSqlSessionFactory完成。<img src="https://img-blog.csdn.net/20180512144825443?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m4"> 这里同样适用到了前面所创建的Configuration对象的配置信息，继续往下<img src="https://img-blog.csdn.net/20180512145058907?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m5"> 这里我们需要重点关注的是Executor对象，这是SqlSession对象去访问数据库的执行器，每一个SqlSession对象都维持着这样一个Executor。到此SqlSession对象创建完成，可以开始对数据库进行访问了。</p>
-</li>
-</ol>
-<ol>
-<li><p>SqlSession的执行过程</p>
-<p>由于SqlSession同样是一个接口，因此具体的任务交给它的实现类DefaultSqlSession完成<img src="https://img-blog.csdn.net/20180512145830917?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m7"> 这里同样用到了Configuration对象的信息。继续往下：<img src="https://img-blog.csdn.net/20180512154819143?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述">这里采用了动态代理技术，继续往下：<img src="https://img-blog.csdn.net/20180512155228622?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="m6">代理类的具体操作封装在invoke()方法之中，由此可见，SqlSession对结果进行了缓存，并封装在一个HashMap之中，其中key为sql语句，value为查询结果。到此整个流程执行完成。</p>
-</li>
-</ol>
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/05/13/谈谈Mybatis的原理及其工作流程/" class="archive-article-date">
+  	<time datetime="2018-05-13T13:04:42.648Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-13</time>
+</a>
+        </div>
+    	 
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/13/谈谈Mybatis的原理及其工作流程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
-    <article id="post-SpringIoC机制的实现原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
+    </div></section>
+  
+
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="SpringIoC机制的实现原理"><a href="#SpringIoC机制的实现原理" class="headerlink" title="SpringIoC机制的实现原理"></a>SpringIoC机制的实现原理</h2><h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？   </p>
-<h2 id="二、Spring的设计理念及其价值"><a href="#二、Spring的设计理念及其价值" class="headerlink" title="二、Spring的设计理念及其价值"></a>二、Spring的设计理念及其价值</h2><p> 设计理念：在JavaEE的应用开发中，支持POJO和使用JavaBean的开发方式，使应用面向接口开发，充分支持面向对象的设计方法。<br>
-        
-          <a class="article-more-a" href="/2018/03/10/SpringIoC机制的实现原理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/10/SpringIoC机制的实现原理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用命令总结（二）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Linux常用命令（二）"><a href="#Linux常用命令（二）" class="headerlink" title="Linux常用命令（二）"></a>Linux常用命令（二）</h2><p>本篇是继上篇博文的内容的完善。<br><a href="http://blog.csdn.net/jackFXX/article/details/79262746" target="_blank" rel="noopener">Linux常用命令总结（一）</a>                    </p>
-<h2 id="一、history命令"><a href="#一、history命令" class="headerlink" title="一、history命令"></a>一、history命令</h2><p>history [选项] [历史命令保存文件]<br>选项：<br>     -c：清空历史命令<br>     -w：把缓存中的历史命令写入历史命令保存文件 ~./bash_history<br>
-        
-          <a class="article-more-a" href="/2018/02/08/Linux常用命令总结（二）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/08/Linux常用命令总结（二）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-使用jsoup和httpclient编写的简单爬虫工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="使用jsoup和httpclient编写的简单爬虫工具"><a href="#使用jsoup和httpclient编写的简单爬虫工具" class="headerlink" title="使用jsoup和httpclient编写的简单爬虫工具"></a>使用jsoup和httpclient编写的简单爬虫工具</h2><h2 id="一、灵感来源"><a href="#一、灵感来源" class="headerlink" title="一、灵感来源"></a>一、灵感来源</h2><p>前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发）</p>
-<h2 id="二、需求分析"><a href="#二、需求分析" class="headerlink" title="二、需求分析"></a>二、需求分析</h2><p>首先对于需求，就要进行大概的分析设计（由于只是简单的做一个测试demo，所以便不必考虑可行性，可维护性等问题），主要归结为以下几步：</p>
-<ol>
-<li>爬取网页数据，那么必然要知道网页的Url，这是我们抓取数据的入口</li>
-<li>网页需要根据发送的url产生响应，并返回html响应页面。</li>
-<li>判断返回得结果是否是我们所需要的</li>
-<li>解析返回得html页面</li>
-<li>将解析的数据打包，写入本地磁盘
-        
-          <a class="article-more-a" href="/2018/02/07/使用jsoup和httpclient编写的简单爬虫工具/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/07/使用jsoup和httpclient编写的简单爬虫工具/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux常用命令总结（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Linux常用命令（一）"><a href="#Linux常用命令（一）" class="headerlink" title="Linux常用命令（一）"></a>Linux常用命令（一）</h2><p>   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。</p>
-<h2 id="一、目录文件处理命令"><a href="#一、目录文件处理命令" class="headerlink" title="一、目录文件处理命令"></a>一、目录文件处理命令</h2><ul>
-<li><p>1.创建目录：</p>
-<p>   mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）</p>
-</li>
-<li><p>2.切换目录：</p>
-<p>   cd 目录名<br>   cd ~ / cd回到家目录<br>   cd - 回到上次目录<br>   cd ..回到上级目录<br>   cd . 切换当前目录</p>
-        
-          <a class="article-more-a" href="/2018/02/05/Linux常用命令总结（一）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/05/Linux常用命令总结（一）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-  
 
 
           </div>
@@ -468,9 +215,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
-		isArchive: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
