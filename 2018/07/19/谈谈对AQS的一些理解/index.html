@@ -6,18 +6,31 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | MrFuJack&#39;Blog</title>
+  <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="灵感源于生活">
-<meta property="og:type" content="website">
+  <meta name="description" content="AQS的概念   AQS全称AbstractQueuedSynchronizer，是java并发包中的核心类，诸如ReentrantLock，CountDownLatch等工具内部都使用了AQS去维护锁的获取与释放：    AQS内部结构首先我们可以找到这样一张图：它描述了其内部是如何维护线程的状态，一起锁的获取。类似于一个阻塞队列，当前持有锁的线程处于head（记住不是在阻塞对面中），新进来的无">
+<meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/07/19/谈谈对AQS的一些理解/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="灵感源于生活">
+<meta property="og:description" content="AQS的概念   AQS全称AbstractQueuedSynchronizer，是java并发包中的核心类，诸如ReentrantLock，CountDownLatch等工具内部都使用了AQS去维护锁的获取与释放：    AQS内部结构首先我们可以找到这样一张图：它描述了其内部是如何维护线程的状态，一起锁的获取。类似于一个阻塞队列，当前持有锁的线程处于head（记住不是在阻塞对面中），新进来的无">
 <meta property="og:locale" content="zh-Hanz">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718200145290?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718200232572?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718200655347?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718200610919?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/2018071820141419?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718201436176?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718201451322?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718202448573?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718202706488?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718202952981?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718203142929?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-07-19T01:11:14.826Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="灵感源于生活">
+<meta name="twitter:description" content="AQS的概念   AQS全称AbstractQueuedSynchronizer，是java并发包中的核心类，诸如ReentrantLock，CountDownLatch等工具内部都使用了AQS去维护锁的获取与释放：    AQS内部结构首先我们可以找到这样一张图：它描述了其内部是如何维护线程的状态，一起锁的获取。类似于一个阻塞队列，当前持有锁的线程处于head（记住不是在阻塞对面中），新进来的无">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180718200145290?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -157,148 +170,153 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-谈谈对AQS的一些理解" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AQS的概念"><a href="#AQS的概念" class="headerlink" title="AQS的概念"></a>AQS的概念</h2><p>   AQS全称AbstractQueuedSynchronizer，是java并发包中的核心类，诸如ReentrantLock，CountDownLatch等工具内部都使用了AQS去维护锁的获取与释放：<img src="https://img-blog.csdn.net/20180718200145290?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="CountDownLatch"><br>   <img src="https://img-blog.csdn.net/20180718200232572?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="AbstractQueuedSynchronizer"></p>
+<h2 id="AQS内部结构"><a href="#AQS内部结构" class="headerlink" title="AQS内部结构"></a>AQS内部结构</h2><p>首先我们可以找到这样一张图：<br><img src="https://img-blog.csdn.net/20180718200655347?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="aqs1"><br>它描述了其内部是如何维护线程的状态，一起锁的获取。类似于一个阻塞队列，当前持有锁的线程处于head（记住不是在阻塞对面中），新进来的无法获取到锁的线程则被包装成为一个Node节点一次放于队尾。<br>我们可以看到其内部几个核心的属性：<img src="https://img-blog.csdn.net/20180718200610919?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="aqs2"><br>head：当前持有锁的线程<br>tail：阻塞队列中未获取到锁的线程<br>state：这是AQS里面最重要的一个变量，锁的获取与释放都与其密切相关。当它等于0时，表示没有线程持有锁，当大于0（锁可重入，每次获取锁，state加1）时表示有线程持有锁。<br>再看看线程时如何进行包装，然后放于阻塞队列的：<img src="https://img-blog.csdn.net/2018071820141419?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="node1"><br><img src="https://img-blog.csdn.net/20180718201436176?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="node2"><br><img src="https://img-blog.csdn.net/20180718201451322?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="node3"><br>每一个线程都会被包装称为一个Node节点存储于阻塞队列中，SHARED和EXCLUSIVE分别指当前线程是期望获取共享锁，还是独占锁。<br>waitSatus：当大于0时表示当前线程放弃了争取锁。<br>prev：前一个节点<br>next：后一个节点<br>thread：所封装着的线程</p>
+<h2 id="内部实现"><a href="#内部实现" class="headerlink" title="内部实现"></a>内部实现</h2><p>AQS通过以下一个主要的发去控制锁的获取和释放：<br>acquire(int arg)：用于获取独占锁<img src="https://img-blog.csdn.net/20180718202448573?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="acquire"><br>很简单，首先尝试获取锁，如果获取失败，说明有线程持有锁，则将其加入当等待队列的末尾。<br>release(int arg)：用于释放独占锁<img src="https://img-blog.csdn.net/20180718202706488?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="release"><br>如果当前线程不为空，且后面有等待的线程，则唤醒后序线程获取锁。<br>acquireShared(int arg)：<img src="https://img-blog.csdn.net/20180718202952981?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="acquireShared"><br>不多说，即时用于获取共享锁。<br>tryReleaseShared(int arg)：<img src="https://img-blog.csdn.net/20180718203142929?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="tryReleaseShared"><br>用于释放共享锁</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>AQS内部通过一个CLH阻塞队列去维持线程的状态，并且使用LockSupport工具去实现线程的阻塞和和唤醒，同时里面大量运用了无锁的CAS算法去实现锁的获取和释放。今后再继续分享具体的并发包里面是如何通过AQS去实现更多丰富的并发工具。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/19/谈谈Mybatis的原理及其工作流程/" class="archive-article-date">
-  	<time datetime="2018-07-19T01:11:49.740Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-19</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/19/谈谈对AQS的一些理解/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/19/谈谈对AQS的一些理解/" class="archive-article-date">
-  	<time datetime="2018-07-19T01:11:17.773Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-19</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/10/SpringIoC机制的实现原理/" class="archive-article-date">
-  	<time datetime="2018-03-10T07:37:04.221Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-10</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+    <a href="/2018/07/19/谈谈Mybatis的原理及其工作流程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/10/SpringIoC机制的实现原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/08/Linux常用命令总结（二）/" class="archive-article-date">
-  	<time datetime="2018-02-08T07:20:58.924Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-08</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/07/使用jsoup和httpclient编写的简单爬虫工具/" class="archive-article-date">
-  	<time datetime="2018-02-07T04:27:06.996Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/05/Linux常用命令总结（一）/" class="archive-article-date">
-  	<time datetime="2018-02-05T09:56:33.239Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-05</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -321,8 +339,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
