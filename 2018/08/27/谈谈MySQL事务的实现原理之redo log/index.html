@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：  原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。  一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。  隔离性（Isolation）：数据库">
+  <meta name="description" content="谈谈MySQL事务的实现原理之redo log一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/谈谈MySQL事务的实现原理之redo log/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：  原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。  一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。  隔离性（Isolation）：数据库">
+<meta property="og:description" content="谈谈MySQL事务的实现原理之redo log一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：">
 <meta property="og:locale" content="zh-Hanz">
-<meta property="og:updated_time" content="2018-08-27T07:32:13.622Z">
+<meta property="og:updated_time" content="2018-08-27T07:38:37.781Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：  原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。  一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。  隔离性（Isolation）：数据库">
+<meta name="twitter:description" content="谈谈MySQL事务的实现原理之redo log一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -163,7 +163,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、事务"><a href="#一、事务" class="headerlink" title="一、事务"></a>一、事务</h2><p>事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：</p>
+        <h2 id="谈谈MySQL事务的实现原理之redo-log"><a href="#谈谈MySQL事务的实现原理之redo-log" class="headerlink" title="谈谈MySQL事务的实现原理之redo log"></a>谈谈MySQL事务的实现原理之redo log</h2><h2 id="一、事务"><a href="#一、事务" class="headerlink" title="一、事务"></a>一、事务</h2><p>事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：<br><a id="more"></a> </p>
 <ul>
 <li><p>原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。</p>
 </li>
@@ -171,9 +171,7 @@
 </li>
 <li><p>隔离性（Isolation）：数据库系统提供一定的隔离机制，保证事务在不受外部并发操作影响的”独立”环境执行。</p>
 </li>
-<li><p>持久性（Durable）：事务完成后，它对于数据的修改是永久性的，即使出现系统故障也能够保持。</p>
-<a id="more"></a>
-<p>二、MySQL的事务实现原理</p>
+<li><p>持久性（Durable）：事务完成后，它对于数据的修改是永久性的，即使出现系统故障也能够保持。<br>二、MySQL的事务实现原理</p>
 </li>
 </ul>
 <hr>

@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线">
+  <meta name="description" content="深入理解并发编程中的volatile关键字作用一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/深入理解并发编程中volatile关键字的作用/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线">
+<meta property="og:description" content="深入理解并发编程中的volatile关键字作用一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切">
 <meta property="og:locale" content="zh-Hanz">
 <meta property="og:image" content="https://img-blog.csdn.net/20180805120209236?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180805121157272?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2018-08-27T07:31:49.938Z">
+<meta property="og:updated_time" content="2018-08-27T07:36:58.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线">
+<meta name="twitter:description" content="深入理解并发编程中的volatile关键字作用一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180805120209236?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
@@ -166,7 +166,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、volatile概述"><a href="#一、volatile概述" class="headerlink" title="一、volatile概述"></a>一、volatile概述</h2><p>volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线程并未完成，那么便需要创建内存来保留当前线程中的指令和数据，等到下次争取到时间片以后，再次需要把这些指令和数据加载进来。显而易见，这是一个非常耗时和耗费资源的过程。而volatile则可以避免线程上下文的切换，为什么能做到以及如何做？下文见分晓<br><a id="more"></a></p>
+        <h2 id="深入理解并发编程中的volatile关键字作用"><a href="#深入理解并发编程中的volatile关键字作用" class="headerlink" title="深入理解并发编程中的volatile关键字作用"></a>深入理解并发编程中的volatile关键字作用</h2><h2 id="一、volatile概述"><a href="#一、volatile概述" class="headerlink" title="一、volatile概述"></a>一、volatile概述</h2><p>volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线程并未完成，那么便需要创建内存来保留当前线程中的指令和数据，等到下次争取到时间片以后，再次需要把这些指令和数据加载进来。显而易见，这是一个非常耗时和耗费资源的过程。而volatile则可以避免线程上下文的切换，为什么能做到以及如何做？下文见分晓<br><a id="more"></a></p>
 <h2 id="二、内存模型"><a href="#二、内存模型" class="headerlink" title="二、内存模型"></a>二、内存模型</h2><p>既然提到了线程之间的通信，那么就必然离不开JMM(Java Memory Model)。在JMM中，将程序运行时的内存主要划分为主内存和工作内存两部分。主内存中主要包括一些共享的数据，资源，每个线程都有自己的工作内存，里面存储有主内存中的共享数据和资源的副本，线程对共享资源的操作都是在自己所占有的工作内存的变量副本（又称高速缓存）中完成的。当线程执行完成以后，便会将自己对资源所做的更改刷新到主内存中，这样其余的线程便可以访问到了。显然，线程如何从主内存中读取资源到工作内存，而后又将资源刷新到主内存便是一个必然要考虑到的问题。</p>
 <h2 id="三、JVM的原子操作"><a href="#三、JVM的原子操作" class="headerlink" title="三、JVM的原子操作"></a>三、JVM的原子操作</h2><p>原子操作是指一系列不可中断的操作，Java中通过以下8个原子操作来实现资源在主内存和工作内存之间的交互：<br>lock：将对象变为独占模式<br>unlock：将锁住对象的锁释放<br>read：作用于主内存，将资源从主内存读取到工作内存<br>load：作用于工作内存，将资源从工作内存读取到工作内存中的变量副本之中<br>use：作用于工作内存，在变量副本中使用资源<br>assign：作用于工作内存，对变量副本中的资源进行更改赋值<br>store：作用于工作内存，将资源从变量副本卸载到工作内存<br>write：作用于主内存，将工作内存中的资源刷新到主内存<br>其中。read-load-use是将资源从主内存中读取到工作内存中不可中断的一系列操作，而assign-store-write则是刷新资源时的原子操作。到此，线程从主内存中读取数据，以及从工作内存刷新数据的问题已经解决了。试想，如果多个线程同时操作某一资源，如何一个线程对资源进行了更新，还未来得及刷新到主内存，另外的线程又在主内存中获取同样的资源，那么这必然是一份脏数据。Java编译器又是如何保证资源在线程之间的可见性的呢？</p>
 <h2 id="四、内存屏障"><a href="#四、内存屏障" class="headerlink" title="四、内存屏障"></a>四、内存屏障</h2><p>为了保证内存中资源的可见性，Java编译器在生成指令序列的时候，在适当的位置插入内存屏障指令，用以禁止特定类型的重排序，JMM中主要有一下4中内存屏障：<br>LoadLoad Barriers：确保Load1数据的装载要先于Load2及其所有后续数据的装载<br>StoreStore Barriers：确保Store1数据的卸载要先于Store2及其所有后续数据的卸载<br>LoadStore Barriers：确保Load1数据的装载要先于Store2及其所有后续数据的刷新<br>StoreLoad Barriers：确保Store1数据对于其它处理机的可见先于Load2及其随意后续数据的装载<br>其中StoreLoad具有前几种屏障的功能，但是它需要把所有写缓冲区中的资源，刷新到主内存中，因此需要慎用。下面我们回归主题，分析volatile的实现原理。</p>

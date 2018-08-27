@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、Mybatis的介绍   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。">
+  <meta name="description" content="谈谈Mybatis的原理及其工作流程一、Mybatis的介绍   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="一、Mybatis的介绍   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。">
+<meta property="og:description" content="谈谈Mybatis的原理及其工作流程一、Mybatis的介绍   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。">
 <meta property="og:locale" content="zh-Hanz">
 <meta property="og:image" content="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180512142623819?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
@@ -27,10 +27,10 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20180512145830917?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180512154819143?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180512155228622?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2018-08-27T07:32:02.006Z">
+<meta property="og:updated_time" content="2018-08-27T07:38:01.068Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="一、Mybatis的介绍   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。">
+<meta name="twitter:description" content="谈谈Mybatis的原理及其工作流程一、Mybatis的介绍   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
@@ -176,7 +176,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、Mybatis的介绍"><a href="#一、Mybatis的介绍" class="headerlink" title="一、Mybatis的介绍"></a>一、Mybatis的介绍</h2><p>   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？<br>       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。<br>      <img src="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><a id="more"></a></p>
+        <h2 id="谈谈Mybatis的原理及其工作流程"><a href="#谈谈Mybatis的原理及其工作流程" class="headerlink" title="谈谈Mybatis的原理及其工作流程"></a>谈谈Mybatis的原理及其工作流程</h2><h2 id="一、Mybatis的介绍"><a href="#一、Mybatis的介绍" class="headerlink" title="一、Mybatis的介绍"></a>一、Mybatis的介绍</h2><p>   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？<br>       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。<br><a id="more"></a><br>      <img src="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <h2 id="二、Mybatis的原理及其工作流程"><a href="#二、Mybatis的原理及其工作流程" class="headerlink" title="二、Mybatis的原理及其工作流程"></a>二、Mybatis的原理及其工作流程</h2><ol>
 <li><p>读取mybatis全局配置文件</p>
 <p>   将定义好的mybatis全局配置文件进行读取，并包装称为一个InputStream对象。这个比较简单，就不详细分析</p>
