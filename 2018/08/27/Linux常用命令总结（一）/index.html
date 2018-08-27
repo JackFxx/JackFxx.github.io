@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录：    mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）">
+  <meta name="description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录： mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/Linux常用命令总结（一）/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录：    mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）">
+<meta property="og:description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录： mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）">
 <meta property="og:locale" content="zh-Hanz">
-<meta property="og:updated_time" content="2018-08-27T07:46:33.422Z">
+<meta property="og:updated_time" content="2018-08-27T08:02:29.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录：    mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）">
+<meta name="twitter:description" content="Linux常用命令（一）   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。 一、目录文件处理命令 1.创建目录： mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -165,27 +165,15 @@
       
         <h2 id="Linux常用命令（一）"><a href="#Linux常用命令（一）" class="headerlink" title=" Linux常用命令（一）"></a> Linux常用命令（一）</h2><p>   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。</p>
 <h2 id="一、目录文件处理命令"><a href="#一、目录文件处理命令" class="headerlink" title="一、目录文件处理命令"></a>一、目录文件处理命令</h2><ul>
-<li><p>1.创建目录：</p>
-<p>   mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）</p>
-<a id="more"></a></li>
-<li><p>2.切换目录：</p>
-<p>   cd 目录名<br>   cd ~ / cd回到家目录<br>   cd - 回到上次目录<br>   cd ..回到上级目录<br>   cd . 切换当前目录</p>
+<li>1.创建目录：<br> mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）<a id="more"></a></li>
+<li><p>2.切换目录：<br> cd 目录名<br> cd ~ / cd回到家目录<br> cd - 回到上次目录<br> cd ..回到上级目录<br> cd . 切换当前目录</p>
 </li>
-<li><p>3.显示当前所在目录：</p>
-<p>   pwd<br>   相对路径：参照当前目录进行查找 cd ../usr/local/src/<br>   绝对路径：从根目录开始一级一级递归查找 cd /etc/</p>
+<li><p>3.显示当前所在目录：<br> pwd<br> 相对路径：参照当前目录进行查找 cd ../usr/local/src/<br> 绝对路径：从根目录开始一级一级递归查找 cd /etc/</p>
 </li>
-<li><p>4.删除目录：</p>
-<p>  rmdir 空目录（只能删除空目录）<br>  rm -rf [文件或目录]<br> 参数：</p>
-<pre><code>-r删除目录
--f强制执行
-</code></pre></li>
-<li><p>5.复制命令：</p>
-<p>  cp [选项] [源文件] [目标地址]<br>选项：</p>
-<pre><code>-r复制目录
--p连带文件属性辅助
--d若源文件是链接文件，则复制链接属性
--a相当于 -pdr
-</code></pre></li>
+<li><p>4.删除目录：<br> rmdir 空目录（只能删除空目录）<br> rm -rf [文件或目录]<br> 参数：<br> -r删除目录<br> -f强制执行</p>
+</li>
+<li><p>5.复制命令：<br> cp [选项] [源文件] [目标地址]<br>选项：<br> -r复制目录<br> -p连带文件属性辅助<br> -d若源文件是链接文件，则复制链接属性<br> -a相当于 -pdr</p>
+</li>
 <li><p>6.剪切或改名命令：</p>
 <p>mv [源文件或目录] [目标目录]<br>同目录改名，不同目录剪切</p>
 </li>
@@ -205,11 +193,7 @@
 </li>
 <li><p>3.命令搜索命令whereis和which命令格式：<br>whereis 命令名（只能搜索系统命令，不能搜索用户创建的普通命令，但能显示帮助文档）<br>选项：<br> -b：只查看可执行文件<br> -m：只查找帮助文件<br>which 命令名（搜索命令所在路径及其别名）<br>PATH环境变量：定义系统搜索命令的路径（echo $PATH查看）</p>
 </li>
-<li><p>4.文件搜索命令find（最强大的搜索命令，遍历系统的所有路径进行查找）:<br>find [搜索范围] [搜索条件]<br>避免大范围搜索！find是使用通配符进行完全匹配（搜索条件和结果完全相同）。<br>Linux中的通配符：</p>
-<pre><code> *匹配任意内容 find /root “a*”
-[]匹配任意一个中括号中的字符 find /root -name “ab[cd]”
- ?匹配任意一个字符 find /root “ab?”
-</code></pre><p>find [搜索范围] -iname [搜索条件] 不区分大小写<br>find [搜索范围] -user [搜索条件] 按照所有者<br>find [搜索范围] -nouser [搜索条件] 查找没有所有者的文件<br>find /var/log/ -[选项] [时间]<br>选项：<br> atime文件访问时间<br> ctime改变文件属性<br> mtime修改文件内容<br>时间：<br> -10：10天内修改文件<br> 10：10天当天修改文件<br> +10：10天前修改文件<br>find . -size 25k/25M 按照文件大小搜索文件<br>选项：<br> -25k：小于25KB的文件<br> 25k：等于25KB的文件<br> +25k：大于25KB的文件<br>find . -inum [i节点号] 按照i节点号搜索<br>find [搜索范围] -size +25k -a -size -50k [操作] 查找指定目录下的大于25KB小于50KB的文件<br>选项：<br> -a：逻辑与<br> -o：逻辑或<br>操作：<br> -exec -ok 命令 {} \;：对搜索结果执行操作，如： -exec ls -lh {} \;显示查询结果的详细信息</p>
+<li><p>4.文件搜索命令find（最强大的搜索命令，遍历系统的所有路径进行查找）:<br>find [搜索范围] [搜索条件]<br>避免大范围搜索！find是使用通配符进行完全匹配（搜索条件和结果完全相同）。<br>Linux中的通配符：<br> <em>匹配任意内容 find /root “a</em>”<br> []匹配任意一个中括号中的字符 find /root -name “ab[cd]”<br> ?匹配任意一个字符 find /root “ab?”<br>find [搜索范围] -iname [搜索条件] 不区分大小写<br>find [搜索范围] -user [搜索条件] 按照所有者<br>find [搜索范围] -nouser [搜索条件] 查找没有所有者的文件<br>find /var/log/ -[选项] [时间]<br>选项：<br> atime文件访问时间<br> ctime改变文件属性<br> mtime修改文件内容<br>时间：<br> -10：10天内修改文件<br> 10：10天当天修改文件<br> +10：10天前修改文件<br>find . -size 25k/25M 按照文件大小搜索文件<br>选项：<br> -25k：小于25KB的文件<br> 25k：等于25KB的文件<br> +25k：大于25KB的文件<br>find . -inum [i节点号] 按照i节点号搜索<br>find [搜索范围] -size +25k -a -size -50k [操作] 查找指定目录下的大于25KB小于50KB的文件<br>选项：<br> -a：逻辑与<br> -o：逻辑或<br>操作：<br> -exec -ok 命令 {} \;：对搜索结果执行操作，如： -exec ls -lh {} \;显示查询结果的详细信息</p>
 </li>
 <li>4.字符串搜索命令grep：<br>grep [选项] 字符串 文件名（在文件当中匹配符合条件的字符串）<br>选项：<br> -v：排除指定字符串<br> -i：忽略大小写<br>使用通配符和正则表达式进行包含匹配</li>
 </ul>
