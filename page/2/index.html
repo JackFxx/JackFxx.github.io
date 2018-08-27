@@ -164,7 +164,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、Spring-AOP概念"><a href="#一、Spring-AOP概念" class="headerlink" title="一、Spring AOP概念"></a>一、Spring AOP概念</h2><p>AOP(Aspect-Oriented Programming)面向切面或者面向方面编程的简称，将一些分散在对象或者类中的与业务逻辑无关的代码分离出来进行独立的管理编码，例如日志，事务处理，异常等。几个相关的重要概念：<br>1、方面/切面（Aspect）：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。<br>2、连接点（Joinpoint）: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。<br>3、Advice(通知)：定义连接点做什么，为切面增强提供织入接口。如BeforeAdivice、AfterAdvice、ThrowsAdvice，其中前两者分别实现了before()和AfterRunning()回调方法，而后者则通过反射机制完成。<br>4、Pointcut(切点)：决定Advice通知应该作用于哪个连接点，也就是说通过Pointcut来定义需要增强的方法的集合，其通常意味着标识方法。对于Pointcut的判断功能，具体是由一个返回得MethodMatcher来完成，由它判断是否要对当前方法进行增强，或者是否需要对当前调用方法应用配置好的Advice通知。<br>5、Advisor(通知器)：用于结合目标对象的切面增强设计(Advice)和关注点设计(Pointcut)，通过Advisor，可以定义应该使用哪个通知并在哪个关注点使用它。<br>
+        <h2 id="深入理解Spring-AOP的实现原理之代理对象的生成"><a href="#深入理解Spring-AOP的实现原理之代理对象的生成" class="headerlink" title="深入理解Spring AOP的实现原理之代理对象的生成"></a>深入理解Spring AOP的实现原理之代理对象的生成</h2><h2 id="一、Spring-AOP概念"><a href="#一、Spring-AOP概念" class="headerlink" title="一、Spring AOP概念"></a>一、Spring AOP概念</h2><p>AOP(Aspect-Oriented Programming)面向切面或者面向方面编程的简称，将一些分散在对象或者类中的与业务逻辑无关的代码分离出来进行独立的管理编码，例如日志，事务处理，异常等。几个相关的重要概念：<br>
         
           <a class="article-more-a" href="/2018/08/27/深入理解SpringAOP的实现原理之代理对象的生成/#more">more >></a>
         
