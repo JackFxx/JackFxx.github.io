@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | MrFuJack&#39;Blog</title>
+  <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="灵感源于生活">
-<meta property="og:type" content="website">
+  <meta name="description" content="一、Spring MVC概念MVC即是模型（Model）、视图（View）、控制器（Controller）的简称。其中M负责对应用数据进行封装，并向外提供应用功能的接口；V负责通过向控制器发送请求，得到响应结果，并向用户展示处理好的的应用数据；C这是用于定义应用的功能，接收用户的动作，并选择相应的视图。Spring MVC就相当于Spring的一个处理模型、视图和控制器的框架，下面我们来分析Spr">
+<meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="灵感源于生活">
+<meta property="og:description" content="一、Spring MVC概念MVC即是模型（Model）、视图（View）、控制器（Controller）的简称。其中M负责对应用数据进行封装，并向外提供应用功能的接口；V负责通过向控制器发送请求，得到响应结果，并向用户展示处理好的的应用数据；C这是用于定义应用的功能，接收用户的动作，并选择相应的视图。Spring MVC就相当于Spring的一个处理模型、视图和控制器的框架，下面我们来分析Spr">
 <meta property="og:locale" content="zh-Hanz">
+<meta property="og:updated_time" content="2018-08-27T07:31:29.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="灵感源于生活">
+<meta name="twitter:description" content="一、Spring MVC概念MVC即是模型（Model）、视图（View）、控制器（Controller）的简称。其中M负责对应用数据进行封装，并向外提供应用功能的接口；V负责通过向控制器发送请求，得到响应结果，并向用户展示处理好的的应用数据；C这是用于定义应用的功能，接收用户的动作，并选择相应的视图。Spring MVC就相当于Spring的一个处理模型、视图和控制器的框架，下面我们来分析Spr">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -157,235 +158,186 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Spring-MVC概念"><a href="#一、Spring-MVC概念" class="headerlink" title="一、Spring MVC概念"></a>一、Spring MVC概念</h2><p>MVC即是模型（Model）、视图（View）、控制器（Controller）的简称。其中M负责对应用数据进行封装，并向外提供应用功能的接口；V负责通过向控制器发送请求，得到响应结果，并向用户展示处理好的的应用数据；C这是用于定义应用的功能，接收用户的动作，并选择相应的视图。Spring MVC就相当于Spring的一个处理模型、视图和控制器的框架，下面我们来分析Spring MVC是如何处理请求，封装数据，再以特定的视图展示给用户的。<br><a id="more"></a></p>
+<h2 id="二、使用ContextConfigLocation在Web容器中使用IoC容器建立上下文"><a href="#二、使用ContextConfigLocation在Web容器中使用IoC容器建立上下文" class="headerlink" title="二、使用ContextConfigLocation在Web容器中使用IoC容器建立上下文"></a>二、使用ContextConfigLocation在Web容器中使用IoC容器建立上下文</h2><p>首先看基本的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;</span><br><span class="line">        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</span><br><span class="line">        &lt;!-- spring mvc的配置文件 --&gt;</span><br><span class="line">        &lt;init-param&gt;</span><br><span class="line">            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</span><br><span class="line">            &lt;param-value&gt;/WEB-INF/applicationContext.xml&lt;/param-value&gt;</span><br><span class="line">        &lt;/init-param&gt;</span><br><span class="line">        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</span><br><span class="line">    &lt;/servlet&gt;</span><br><span class="line">    &lt;servlet-mapping&gt;</span><br><span class="line">        &lt;servlet-name&gt;mvc-dispatcher&lt;/servlet-name&gt;</span><br><span class="line">        &lt;url-pattern&gt;/&lt;/url-pattern&gt;</span><br><span class="line">    &lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>先讲讲两个很重要的类，DispatcherServlet这个是Spring MVC的关键类，起着分发请求的作用，ContextConfigLocation是一个用于完成IoC容器在Web环境中的启动工作。通过ContextConfigLocation在Web环境中建立起一个上下文环境，然后把DispatcherServlet作为Spring MVC处理Web请求的转发器，从而完成相应前端http请求的准备工作。<br>在ContextConfigLocation可以看到两个核心的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> //在Web环境中初始化上下文</span><br><span class="line"> public void contextInitialized(ServletContextEvent event) &#123;</span><br><span class="line">        this.initWebApplicationContext(event.getServletContext());</span><br><span class="line">    &#125;</span><br><span class="line">//销毁上下文</span><br><span class="line">    public void contextDestroyed(ServletContextEvent event) &#123;</span><br><span class="line">        this.closeWebApplicationContext(event.getServletContext());</span><br><span class="line">        ContextCleanupListener.cleanupAttributes(event.getServletContext());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>其中ContextConfigLocation启动的上下文为根上下文，同时还会创建一个用于保存DispatcherServlet所需要的MVC对象的子上下文，从而构成一个完成的上下文体系。这个上下文体系的建立是交给ContextConfigLocation的基类ContextLoader完成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//创建子上下文</span><br><span class="line"> this.context = this.createWebApplicationContext(servletContext);</span><br><span class="line">//加载并创建根上下文</span><br><span class="line"> ApplicationContext parent = this.loadParentContext(servletContext);</span><br></pre></td></tr></table></figure>
+<p>在ContextLoader中，完成了两个IoC容器(应用上下文)建立的基本过程，一个是在Web容器中建立起的双亲IoC容器，另一个是生成相应的WebApplicationContext并将其初始化。</p>
+<h2 id="三、DispatcherServlet的启动和初始化"><a href="#三、DispatcherServlet的启动和初始化" class="headerlink" title="三、DispatcherServlet的启动和初始化"></a>三、DispatcherServlet的启动和初始化</h2><p>DispatcherServlet作为一个Servlet，自然启动和初始化的过程与init()方法密切相关，下面示其基类HttpServletBean中定义的init()方法部分代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//获取Servlet的基本配置，同时对bean的属性进行设置</span><br><span class="line">PropertyValues pvs = new HttpServletBean.ServletConfigPropertyValues(this.getServletConfig(), this.requiredProperties);</span><br><span class="line">        if (!pvs.isEmpty()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);</span><br><span class="line">                ResourceLoader resourceLoader = new ServletContextResourceLoader(this.getServletContext());</span><br><span class="line">                bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, this.getEnvironment()));</span><br><span class="line">                this.initBeanWrapper(bw);</span><br><span class="line">                bw.setPropertyValues(pvs, true);</span><br><span class="line">            &#125; catch (BeansException var4) &#123;</span><br><span class="line">                if (this.logger.isErrorEnabled()) &#123;</span><br><span class="line">                    this.logger.error(&quot;Failed to set bean properties on servlet &apos;&quot; + this.getServletName() + &quot;&apos;&quot;, var4);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                throw var4;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">//对bean进行初始化</span><br><span class="line"> this.initServletBean();</span><br></pre></td></tr></table></figure>
+<p>接下来，对前文中所提到的DispatcherServlet所持有的子上下文进行初始化，根上下文是与整个的Web应用相对应着的一个上下文，而子上下文则是和一个Servlet相对应的上下文。同时，由于IoC容器中获取bean时，会先去其双亲上下文中getBean()，因此在根上下文中所定义的bean会在子下文中得到共享。至此完成了整个MVC的上下文建立过程。</p>
+<h2 id="四、HandlerMapping的实现原理（M与C的设计原理）"><a href="#四、HandlerMapping的实现原理（M与C的设计原理）" class="headerlink" title="四、HandlerMapping的实现原理（M与C的设计原理）"></a>四、HandlerMapping的实现原理（M与C的设计原理）</h2><p>在前文的初始化过程中，在上下文环境中已定义的HandlerMapping都已被加载了，这些都被有序的放在在一个List中，其中存储这Http请求对应的映射数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private List&lt;HandlerMapping&gt; handlerMappings;</span><br><span class="line">this.handlerMappings = new ArrayList(matchingBeans.values());</span><br><span class="line">//排序处理</span><br><span class="line">AnnotationAwareOrderComparator.sort(this.handlerMappings);</span><br></pre></td></tr></table></figure>
+<p>以SimpleUrlHandlerMapping为例，在SimpleUrlHandlerMapping中维持着一个LinkedHashMap去持有URL请求和控制器的映射关系，因此Spring MVC可以通过一个Http请求去找到对应的Controller。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private final Map&lt;String, Object&gt; urlMap = new LinkedHashMap();</span><br></pre></td></tr></table></figure>
+<p>在HandlerMapping中定义了一个getHandler()方法，用于获取与http请求对应的HandlerExecutionChain：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HandlerExecutionChain getHandler(HttpServletRequest var1) throws Exception;</span><br></pre></td></tr></table></figure></p>
+<p>其中HandlerExecutionChain持有一个Interceptor链和一个handler对象，而handler对象即是http请求所对应着的Controller,通过拦截器链上的拦截器可以对handler对象的功能提供增强处理，类似于AOP中拦截器链的功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class HandlerExecutionChain &#123;</span><br><span class="line">    private static final Log logger = LogFactory.getLog(HandlerExecutionChain.class);</span><br><span class="line">    //Controller对象</span><br><span class="line">    private final Object handler;</span><br><span class="line">    //拦截器链</span><br><span class="line">    private HandlerInterceptor[] interceptors;</span><br><span class="line">    private List&lt;HandlerInterceptor&gt; interceptorList;</span><br><span class="line">    private int interceptorIndex;</span><br><span class="line">    //将配置好的Handler和拦截器链转化为HandlerExecutionChain的内部属性</span><br><span class="line">    public HandlerExecutionChain(Object handler, HandlerInterceptor... interceptors) &#123;</span><br><span class="line">        this.interceptorIndex = -1;</span><br><span class="line">        if (handler instanceof HandlerExecutionChain) &#123;</span><br><span class="line">            HandlerExecutionChain originalChain = (HandlerExecutionChain)handler;</span><br><span class="line">            this.handler = originalChain.getHandler();</span><br><span class="line">            this.interceptorList = new ArrayList();</span><br><span class="line">            CollectionUtils.mergeArrayIntoCollection(originalChain.getInterceptors(), this.interceptorList);</span><br><span class="line">            CollectionUtils.mergeArrayIntoCollection(interceptors, this.interceptorList);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            this.handler = handler;</span><br><span class="line">            this.interceptors = interceptors;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>下面来分析是如何将http请求与handler对象注册在handlerMap当中，以SimpleUrlHandlerMapping为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">protected void registerHandlers(Map&lt;String, Object&gt; urlMap) throws BeansException &#123;</span><br><span class="line">        String url;</span><br><span class="line">        Object handler;</span><br><span class="line">        if (urlMap.isEmpty()) &#123;</span><br><span class="line">            this.logger.warn(&quot;Neither &apos;urlMap&apos; nor &apos;mappings&apos; set on SimpleUrlHandlerMapping&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">        //对urlMap中的bean进行解析，并调用基类的registerHandler完成注册</span><br><span class="line">            for(Iterator var2 = urlMap.entrySet().iterator(); var2.hasNext(); this.registerHandler(url, handler)) &#123;</span><br><span class="line">                Entry&lt;String, Object&gt; entry = (Entry)var2.next();</span><br><span class="line">                url = (String)entry.getKey();</span><br><span class="line">                handler = entry.getValue();</span><br><span class="line">                if (!url.startsWith(&quot;/&quot;)) &#123;</span><br><span class="line">                    url = &quot;/&quot; + url;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (handler instanceof String) &#123;</span><br><span class="line">                    handler = ((String)handler).trim();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>基类AbstractUrlHandlerMapping中的registerHandler()：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//持有映射关系</span><br><span class="line"> private final Map&lt;String, Object&gt; handlerMap = new LinkedHashMap();</span><br><span class="line"></span><br><span class="line"> Object mappedHandler = this.handlerMap.get(urlPath);</span><br><span class="line">        if (mappedHandler != null) &#123;</span><br><span class="line">            if (mappedHandler != resolvedHandler) &#123;</span><br><span class="line">                throw new IllegalStateException(&quot;Cannot map &quot; + this.getHandlerDescription(handler) + &quot; to URL path [&quot; + urlPath + &quot;]: There is already &quot; + this.getHandlerDescription(mappedHandler) + &quot; mapped.&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        //处理URL是&quot;/&quot;的映射，并把映射的Controller设置到rootHandler中 </span><br><span class="line">        else if (urlPath.equals(&quot;/&quot;)) &#123;</span><br><span class="line">            if (this.logger.isInfoEnabled()) &#123;</span><br><span class="line">                this.logger.info(&quot;Root mapping to &quot; + this.getHandlerDescription(handler));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            this.setRootHandler(resolvedHandler);</span><br><span class="line">        &#125; </span><br><span class="line">        //处理是&quot;/*&quot;的映射，并把响应的Controller设置到DefaultHandler中</span><br><span class="line">        else if (urlPath.equals(&quot;/*&quot;)) &#123;</span><br><span class="line">            if (this.logger.isInfoEnabled()) &#123;</span><br><span class="line">                this.logger.info(&quot;Default mapping to &quot; + this.getHandlerDescription(handler));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            this.setDefaultHandler(resolvedHandler);</span><br><span class="line">        &#125; </span><br><span class="line">        //处理正常的映射</span><br><span class="line">        else &#123;</span><br><span class="line">            this.handlerMap.put(urlPath, resolvedHandler);</span><br><span class="line">            if (this.logger.isInfoEnabled()) &#123;</span><br><span class="line">                this.logger.info(&quot;Mapped URL path [&quot; + urlPath + &quot;] onto &quot; + this.getHandlerDescription(handler));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>至此通过Spring MVC中通过上文的handlerMap持有http请求与Controller的映射关系，每当有请求到来，都可以找到相应的handler了。而对于请求的处理，是在doService方法中完成的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">protected void doService(HttpServletRequest request, HttpServletResponse response) throws Exception &#123;</span><br><span class="line">       ...</span><br><span class="line">       Map&lt;String, Object&gt; attributesSnapshot = null;</span><br><span class="line">       ...</span><br><span class="line">       //对http请求进行处理，设置上下文，解析器...</span><br><span class="line">       request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.getWebApplicationContext());</span><br><span class="line">       request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);</span><br><span class="line">       request.setAttribute(THEME_RESOLVER_ATTRIBUTE, this.themeResolver);</span><br><span class="line">       request.setAttribute(THEME_SOURCE_ATTRIBUTE, this.getThemeSource());</span><br><span class="line">       FlashMap inputFlashMap = this.flashMapManager.retrieveAndUpdate(request, response);</span><br><span class="line">       if (inputFlashMap != null) &#123;</span><br><span class="line">           request.setAttribute(INPUT_FLASH_MAP_ATTRIBUTE, Collections.unmodifiableMap(inputFlashMap));</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       request.setAttribute(OUTPUT_FLASH_MAP_ATTRIBUTE, new FlashMap());</span><br><span class="line">       request.setAttribute(FLASH_MAP_MANAGER_ATTRIBUTE, this.flashMapManager);</span><br><span class="line"></span><br><span class="line">       try &#123;</span><br><span class="line">           //正式处理和分发请求的入口</span><br><span class="line">           this.doDispatch(request, response);</span><br><span class="line">       &#125; </span><br><span class="line">       ...</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>下面示doDispatch()方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception &#123;</span><br><span class="line">                   processedRequest = this.checkMultipart(request);</span><br><span class="line">                   multipartRequestParsed = processedRequest != request;</span><br><span class="line">                   //从http请求中获取相应的handler</span><br><span class="line">                   mappedHandler = this.getHandler(processedRequest);</span><br><span class="line">                   if (mappedHandler == null || mappedHandler.getHandler() == null) &#123;</span><br><span class="line">                       this.noHandlerFound(processedRequest, response);</span><br><span class="line">                       return;</span><br><span class="line">                   &#125;</span><br><span class="line">                   //选择适应的HandlerAdapter </span><br><span class="line">                   HandlerAdapter ha = this.getHandlerAdapter(mappedHandler.getHandler());</span><br><span class="line">                   //处理handler并将处理结果封装到ModelAndView对象中</span><br><span class="line">                   mv = ha.handle(processedRequest, response, mappedHandler.getHandler());</span><br></pre></td></tr></table></figure>
+<p>至此，M生成完成，下面看看C如何生成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception &#123;</span><br><span class="line">        //遍历Map中的HandlerMapping </span><br><span class="line">        Iterator var2 = this.handlerMappings.iterator();</span><br><span class="line">        HandlerExecutionChain handler;</span><br><span class="line">        do &#123;</span><br><span class="line">            if (!var2.hasNext()) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            HandlerMapping hm = (HandlerMapping)var2.next();</span><br><span class="line">            if (this.logger.isTraceEnabled()) &#123;</span><br><span class="line">                this.logger.trace(&quot;Testing handler map [&quot; + hm + &quot;] in DispatcherServlet with name &apos;&quot; + this.getServletName() + &quot;&apos;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            //根据http请求从HandlerMapping之中取得相对应的Handler即Controller对象，并将其和拦截器链一起封装到HandlerExecutionChain中</span><br><span class="line">            handler = hm.getHandler(request);</span><br><span class="line">        &#125; while(handler == null);</span><br><span class="line"></span><br><span class="line">        return handler;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>到此C也实现完成了。</p>
+<h2 id="五、视图呈现的实现原理-V的设计原理"><a href="#五、视图呈现的实现原理-V的设计原理" class="headerlink" title="五、视图呈现的实现原理(V的设计原理)"></a>五、视图呈现的实现原理(V的设计原理)</h2><p>对于视图的呈现和处理，依旧是从doDispatch()为入口，具体的实现又是在render()方法之中完成，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">protected void render(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws Exception &#123;</span><br><span class="line">        Locale locale = this.localeResolver.resolveLocale(request);</span><br><span class="line">        response.setLocale(locale);</span><br><span class="line">        View view;</span><br><span class="line">        //根据ModelAndView中设置的视图名称进行解析，得到对应的视图对象</span><br><span class="line">        //ModelAndView中的仅仅包含的View对象的名字，View还未解析过</span><br><span class="line">        if (mv.isReference()) &#123;</span><br><span class="line">            view = this.resolveViewName(mv.getViewName(), mv.getModelInternal(), locale, request);</span><br><span class="line">            if (view == null) &#123;</span><br><span class="line">                throw new ServletException(&quot;Could not resolve view with name &apos;&quot; + mv.getViewName() + &quot;&apos; in servlet with name &apos;&quot; + this.getServletName() + &quot;&apos;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            //已经解析过，直接取出View对象</span><br><span class="line">            view = mv.getView();</span><br><span class="line">            if (view == null) &#123;</span><br><span class="line">                throw new ServletException(&quot;ModelAndView [&quot; + mv + &quot;] neither contains a view name nor a View object in servlet with name &apos;&quot; + this.getServletName() + &quot;&apos;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (this.logger.isDebugEnabled()) &#123;</span><br><span class="line">            this.logger.debug(&quot;Rendering view [&quot; + view + &quot;] in DispatcherServlet with name &apos;&quot; + this.getServletName() + &quot;&apos;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            if (mv.getStatus() != null) &#123;</span><br><span class="line">                response.setStatus(mv.getStatus().value());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //调用view的render()方法对数据进行呈现，并通过HttpResponse对象把视图呈现给客户端</span><br><span class="line">            view.render(mv.getModelInternal(), request, response);</span><br><span class="line">        &#125; catch (Exception var7) &#123;</span><br><span class="line">            if (this.logger.isDebugEnabled()) &#123;</span><br><span class="line">                this.logger.debug(&quot;Error rendering view [&quot; + view + &quot;] in DispatcherServlet with name &apos;&quot; + this.getServletName() + &quot;&apos;&quot;, var7);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            throw var7;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>那么又是如何结合解析和生成View对象的，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">protected View resolveViewName(String viewName, Map&lt;String, Object&gt; model, Locale locale, HttpServletRequest request) throws Exception &#123;</span><br><span class="line">        //遍历已有的视图解析器</span><br><span class="line">        Iterator var5 = this.viewResolvers.iterator();</span><br><span class="line">        View view;</span><br><span class="line">        do &#123;</span><br><span class="line">            if (!var5.hasNext()) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ViewResolver viewResolver = (ViewResolver)var5.next();</span><br><span class="line">            //选择对应的视图解析器进行解析</span><br><span class="line">            view = viewResolver.resolveViewName(viewName, locale);</span><br><span class="line">        &#125; while(view == null);</span><br><span class="line"></span><br><span class="line">        return view;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>以BeanNameViewResolver为例，直接从已有上下文中通过名称的对应关系将作为View对象的Bean取出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public View resolveViewName(String viewName, Locale locale) throws BeansException &#123;</span><br><span class="line">        //获取上下文</span><br><span class="line">        ApplicationContext context = this.getApplicationContext();</span><br><span class="line">        if (!context.containsBean(viewName)) &#123;</span><br><span class="line">            if (this.logger.isDebugEnabled()) &#123;</span><br><span class="line">                this.logger.debug(&quot;No matching bean found for view name &apos;&quot; + viewName + &quot;&apos;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            return null;</span><br><span class="line">        &#125; else if (!context.isTypeMatch(viewName, View.class)) &#123;</span><br><span class="line">            if (this.logger.isDebugEnabled()) &#123;</span><br><span class="line">                this.logger.debug(&quot;Found matching bean for view name &apos;&quot; + viewName + &quot;&apos; - to be ignored since it does not implement View&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            return null;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">        //从上下文中根据配置的Bean名称取出相应的Bean对象，并转化为View对象</span><br><span class="line">            return (View)context.getBean(viewName, View.class);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>至此，View对象生成以及通过render()方法对数据进行呈现，并通过HttpResponse对象把视图呈现给客户端完成。</p>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>本文分析了Spring MVC中三个模块的实现原理，以及如何处理请求，找到相应的Handler，最后将视图呈现给客户端。以后将详细总结Spring MVC具体的请求流程</p>
+<p>参考文献：《Spring技术内幕》计文柯</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（一）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:13.171Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/使用jsoup和httpclient编写的简单爬虫工具/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:00.447Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（二）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:50.910Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+    <a href="/2018/08/27/深入理解并发编程中volatile关键字的作用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/27/MySQL的explain语句分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/SpringIoC机制的实现原理/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:40.660Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:24.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈对AQS的一些理解 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:16.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/深入理解并发编程中volatile关键字的作用/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:08.127Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:59.375Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/MySQL的explain语句分析/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:51.629Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈MySQL事务的实现原理之redo log/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:41.257Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -409,8 +361,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

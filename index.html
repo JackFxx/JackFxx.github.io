@@ -159,14 +159,17 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-深入理解SpringAOP的实现原理之代理对象的生成" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Linux常用命令总结（一）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、Spring-AOP概念"><a href="#一、Spring-AOP概念" class="headerlink" title="一、Spring AOP概念"></a>一、Spring AOP概念</h2><p>AOP(Aspect-Oriented Programming)面向切面或者面向方面编程的简称，将一些分散在对象或者类中的与业务逻辑无关的代码分离出来进行独立的管理编码，例如日志，事务处理，异常等。几个相关的重要概念：<br>1、方面/切面（Aspect）：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。<br>2、连接点（Joinpoint）: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。<br>3、Advice(通知)：定义连接点做什么，为切面增强提供织入接口。如BeforeAdivice、AfterAdvice、ThrowsAdvice，其中前两者分别实现了before()和AfterRunning()回调方法，而后者则通过反射机制完成。<br>4、Pointcut(切点)：决定Advice通知应该作用于哪个连接点，也就是说通过Pointcut来定义需要增强的方法的集合，其通常意味着标识方法。对于Pointcut的判断功能，具体是由一个返回得MethodMatcher来完成，由它判断是否要对当前方法进行增强，或者是否需要对当前调用方法应用配置好的Advice通知。<br>5、Advisor(通知器)：用于结合目标对象的切面增强设计(Advice)和关注点设计(Pointcut)，通过Advisor，可以定义应该使用哪个通知并在哪个关注点使用它。<br>
+        <h2 id="Linux常用命令（一）"><a href="#Linux常用命令（一）" class="headerlink" title="Linux常用命令（一）"></a>Linux常用命令（一）</h2><p>   最近看了imooc上tony老师关于shell编程得一些视频，加上从相关书籍上收集整理了一部分linux的常用命令。</p>
+<h2 id="一、目录文件处理命令"><a href="#一、目录文件处理命令" class="headerlink" title="一、目录文件处理命令"></a>一、目录文件处理命令</h2><ul>
+<li><p>1.创建目录：</p>
+<p>   mkdir [-p] 目录名 递归创建目录（-p：可在目录里面创建文件）</p>
         
-          <a class="article-more-a" href="/2018/08/27/深入理解SpringAOP的实现原理之代理对象的生成/#more">more >></a>
+          <a class="article-more-a" href="/2018/08/27/Linux常用命令总结（一）/#more">more >></a>
         
       
 
@@ -179,7 +182,57 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/27/深入理解SpringAOP的实现原理之代理对象的生成/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/08/27/Linux常用命令总结（一）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-使用jsoup和httpclient编写的简单爬虫工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、灵感来源"><a href="#一、灵感来源" class="headerlink" title="一、灵感来源"></a>一、灵感来源</h2><p>前两天有位朋友向我提到了这样一个需求，希望从某张网页上抓取数据然后自动填入到本地的Excel表格中，当你需要进行大量的数据统计时，会显得很方便，让简单的工作变得自动化。这不正是shell编程得目的吗！（本文与shell编程无关，只是有感即发）<br>
+        
+          <a class="article-more-a" href="/2018/08/27/使用jsoup和httpclient编写的简单爬虫工具/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/使用jsoup和httpclient编写的简单爬虫工具/">展开全文 >></a>
         </p>
       
 
@@ -215,143 +268,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="Linux常用命令（二）"><a href="#Linux常用命令（二）" class="headerlink" title="Linux常用命令（二）"></a>Linux常用命令（二）</h2><p>本篇是继上篇博文的内容的完善。<br><a href="http://blog.csdn.net/jackFXX/article/details/79262746" target="_blank" rel="noopener">Linux常用命令总结（一）</a>                    </p>
-<h2 id="一、history命令"><a href="#一、history命令" class="headerlink" title="一、history命令"></a>一、history命令</h2><p>history [选项] [历史命令保存文件]<br>选项：<br>     -c：清空历史命令<br>     -w：把缓存中的历史命令写入历史命令保存文件 ~./bash_history</p>
-<h2 id="二、输出输入重定向"><a href="#二、输出输入重定向" class="headerlink" title="二、输出输入重定向"></a>二、输出输入重定向</h2><ol>
-<li><p>输出重定向：</p>
-<p>  <img src="http://img.blog.csdn.net/2018020814471315?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="输出重定向"></p>
-</li>
-<li><p>输入重定向：<br>wc [选项] [文件名]<br>选项：<br>-c：统计字节数<br>-w：统计单词数<br>-l：统计行数<br>用ctrl+d结束输入并统计输出结果，结果的格式一般分别为 行、 单词 、字节<br>命令 &lt; 文件 统计文件的信息<br>命令 &lt;&lt; 统计标识符 （统计两个标识符之间的信息 abc开始……abc结束）</p>
-</li>
-</ol>
-<h2 id="三、管道符"><a href="#三、管道符" class="headerlink" title="三、管道符"></a>三、管道符</h2><ol>
-<li><p>多命令执行符：<br><img src="http://img.blog.csdn.net/20180208145059398?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-</li>
-<li><p>管道符：<br>命令1 | 命令2 命令1的正确输出作为命令2的操作对象，例如ls -l /etc more；<br>more命令用于结果分页显示。</p>
-</li>
-</ol>
-<h2 id="四、通配符"><a href="#四、通配符" class="headerlink" title="四、通配符"></a>四、通配符</h2><p>基本通配符：<br><img src="http://img.blog.csdn.net/2018020814522231?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="基本通配符"></p>
-<h2 id="五、bash变量"><a href="#五、bash变量" class="headerlink" title="五、bash变量"></a>五、bash变量</h2><ol>
-<li><p>用户自定义变量：<br>[变量名]=[变量值]<br>打印变量信息：<br>echo \$变量名<br>查看系统所有变量：<br>set<br>删除变量：<br>unset [变量名]</p>
-</li>
-<li><p>创建自定义的环境变量：<br>export [变量名]=[变量值]<br>查看环境变量:<br>env<br>PATH变量：<br>系统查找命令的路径<br>增加PATH变量的值：</p>
-</li>
-<li><p>查看当前操作系统的语系：<br>locale [参数]<br>参数：</p>
-<pre><code>LANG：显示系统当前语系
-</code></pre><p>显示所有语系：<br>locale -a<br>查看默认语系：<br>cat /etc/sysconfig/i18n<br>统计分区大小：<br>df -h</p>
-</li>
-<li><p>位置参数变量：<br>\$n：n表示第几个参数 0代表命令本身,1-9代表一到第九个参数，十以上的参数需要用大括号包含如，\${10};<br>例如sum.sh：<br>#!/bin/bash<br>name1=\$1<br>name2=\$2<br>sum=\$((\$name1+\$name2))<br>echo \$sum<br>运行如下：<br>./sum.sh 3 4结果为7<br>\$*返回命令行输入的所有参数，并把所有参数看成一个整体<br>\$@返回命令行输入的所有参数，把每个参数区分对待<br>\$#返回输入的参数个数<br>预定义变量：<br>\$?：输出为0指上次命令执行正确，否则错误（错误的返回值有编写人员决定）<br>\$$：返回当前进程的PID号<br>\$!：后台运行的最后一个进程的进程号（PID号）</p>
-</li>
-<li><p>接收键盘输入：<br>  read [选项][变量名]</p>
-<pre><code>选项：
-    -p 提示信息：在等待read输入时，输出提示信息
-    -t 秒数：read命令会一直等待用户输入，使用此选项可以指定等待时间
-    -n 字符数：read命令只接受指定的字符数，就会执行
-    -s 隐藏输入的数据：适用于机密信息的输入
-换行：
-echo -e “\n”
-</code></pre></li>
-</ol>
-<h2 id="六、运算符"><a href="#六、运算符" class="headerlink" title="六、运算符"></a>六、运算符</h2><ol>
-<li><p>declare声明变量类型：</p>
-<pre><code>declare [+/-][选项] 变量名
-选项：
-    +：取消变量的类型属性
-    -：给变量设定类型属性
-    -a：将变量声明为数组类型
-    -i：将变量声明为整型
-   -x：将变量声明为环境变量
-   -r：将变量声明为只读变量
-   -p：显示指定变量的被声明的类型
-</code></pre></li>
-<li><p>expr或let数值运算工具：</p>
-<pre><code>sum=\$(expr \$aa+\$bb)
-</code></pre><p>   “\$((运算式))”或”\$[运算式]”：</p>
-<pre><code>ff=\$((\$aa+\$bb))
-</code></pre></li>
-<li><p>变量测试：</p>
-<pre><code>主要用于shell优化
-</code></pre></li>
-</ol>
-<h2 id="七、环境变量"><a href="#七、环境变量" class="headerlink" title="七、环境变量"></a>七、环境变量</h2><ol>
-<li>umask：用于查看系统的默认权限，目录最高为权限777（rwxrwxrwx），文件最高权限为666（rw-rw-rw-)；<pre><code>创建的文件或者目录的权限通过字母的加减确定，如：
-                                            umask [文件]
-                                            0022 代表 ----w--w-
-                                            则创建的文件权限rw-r--r--
-</code></pre></li>
-<li><p>source [配置文件] 或者 . [配置文件]：直接使修改的配置文件生效，不需要重启</p>
-</li>
-<li><p>登陆时起作用的环境变量配置文件：</p>
-<pre><code>/etc/profile（完整登陆的起点）（改历史命令条数）
-/etc/profile.d/*.sh
-~/.bash_profile
-~/.bashrc（改别名）
-/etc/bashrc（非完整登陆的起点，如切换超级用户 ）（改登陆提示符）
-</code></pre><p>启动流程：</p>
-</li>
-<li><p>3.环境变量配置文件的功能：</p>
-<pre><code> /etc/profile：USER umask......
-/etc/bashrc：PS1变量，umask，PATH变量，调用/etc/profile.d/*.sh文件
-</code></pre></li>
-<li><p>注销时生效的环境变量配置文件：</p>
-<pre><code>~/.bash_logout
-</code></pre></li>
-<li><p>保存历史命令的配置文件：</p>
-<pre><code>~/.bash_history（保存在文件当中的历史命令，可调大）
-</code></pre></li>
-<li><p>本地终端警告信息（登陆之前显示）：<br>/etc/issue 里面可添加转义符：<br>\r:显示内核版本                    </p>
-<pre><code>\n:显示主机名
-\o:显示域名
-\d:显示系统日期 
-</code></pre><p>\s:显示操作系统名称<br>\l:显示登陆的终端号（默认有6个字符界面 tty1-6）</p>
-</li>
-<li><p>远程终端警告信息（登陆之前显示）：</p>
-<pre><code>/etc/issue.net 里面不可加转义符，由ssh的配置文件/etc/ssh/sshd_config决定，加入”Banner/etc/issue.net行才能显示（需要重启SSH服务）；
-</code></pre></li>
-<li><p>本地与远程均可显示（登陆后显示警告）：</p>
-<pre><code>/etc/motd
-</code></pre></li>
-</ol>
-<h2 id="八、正则表达式"><a href="#八、正则表达式" class="headerlink" title="八、正则表达式"></a>八、正则表达式</h2><p>基础正则表达式：<br><img src="http://img.blog.csdn.net/20180208150112952?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamFja0ZYWA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<h2 id="九、字符截取命令"><a href="#九、字符截取命令" class="headerlink" title="九、字符截取命令"></a>九、字符截取命令</h2><ol>
-<li><p>cut字段提取命令（无法识别空格）：<br>cut  [选项] 文件名<br>   选项：</p>
-<pre><code>-f 列号：提取第几列
--d 分隔符：按照指定分隔符分割列
-</code></pre></li>
-<li><p>printf命令:<br>printf ‘输出类型输出格式’ 输出内容<br>输出类型：</p>
-<pre><code>%ns：输出字符串。N是数字指代输出几个字符
-%ni：输出整数。N是数字指代输出几个数字
-%m.nf：输出浮点数。M和n是数字，指代输出的整数位数和小数位数。如%8.2f代表共输出8位数，其中2位数小数，6位是整数123456.78。
-</code></pre><p>输出格式：</p>
-<pre><code>\a：输出警告声音
-\b：输出退格键
-\f：清除屏幕
-\n：换行
-\r：回车，也就是Enter键
-\t：水平输出退格键，也就是Tab键
-\v：垂直输出退格键，也就是Tab键
-</code></pre></li>
-<li><p>awk命令：<br>awk ‘条件1{动作1}条件2{动作2}…’ 文件名<br>条件：<br>   一般使用关系表达式作为条件<br>   x&gt;10：判断变量x是否大于10<br>   x&gt;=10：大于等于<br>   X&lt;=：小于等于<br>动作：<br>   格式化输出<br>   流程控制语句<br>例如：<br>  awk ‘{printf \$2 “\t” \$4 “\n”} test.txt<br>  df -h | awk ‘{print \$5}’：查看系统资源占用情况<br>   FS：内置变量，用于表示分隔符是什么<br>如：awk ‘BEGIN{FS=”:”} {print $1 “\t” $3}’</p>
-</li>
-<li><p>ps命令：<br>ps aux：查看系统中所有正在运行的进程</p>
-</li>
-<li><p>sed命令（字符串选取，替换，删除，增加）（与vi相似）：</p>
-<p>sed [选项] ‘[动作]’ 文件名<br>选项：<br>   -n：一般sed命令会把所有数据都输出到屏幕，如果加入此选择，则只会把经过sed命令处理的行输出到屏幕。<br>   -e：允许对输入数据应用多条sed命令编辑<br>   -i：用sed的修改结果直接修改读取数据的文件，而不是由屏幕输出<br>   动作：</p>
-<pre><code>a：追加，在当前行后添加一行或多行
-c：行替换，用c后面的字符串替换原数据行
-i：插入，在当前行前插入一行或多行。d：删除，删除指定行
-p：打印，输出指定的行
-s：字串替换，用一个字符串替换另外一个字符串。格式为”行范围s/旧字串/新字串/g”
-</code></pre></li>
-</ol>
-<h2 id="十、字符处理命令"><a href="#十、字符处理命令" class="headerlink" title="十、字符处理命令"></a>十、字符处理命令</h2><ol>
-<li><p>sort命令：<br>sort [选项] 文件名<br>选项：<br>   -f：忽略大小写<br>   -n：以数值型进行排序，默认使用字符串排序<br>   -r：反向排序<br>   -t：指定分隔符，默认的分隔符是制表符<br>   -k n[,m]：按照指定的字段范围排序。从第n个字段开始，m字段结束。</p>
-</li>
-<li><p>wc命令：<br>wc [选项] 文件名<br>选项：</p>
-<pre><code>-m：统计字符数
-</code></pre><p>   -w：只统计单词数<br>   -l：只统计行数</p>
-</li>
-</ol>
-
+<h2 id="一、history命令"><a href="#一、history命令" class="headerlink" title="一、history命令"></a>一、history命令</h2><p>history [选项] [历史命令保存文件]<br>选项：<br>     -c：清空历史命令<br>     -w：把缓存中的历史命令写入历史命令保存文件 ~./bash_history<br>
+        
+          <a class="article-more-a" href="/2018/08/27/Linux常用命令总结（二）/#more">more >></a>
+        
       
 
       
@@ -393,6 +313,368 @@ s：字串替换，用一个字符串替换另外一个字符串。格式为”�
 
 
   
+    <article id="post-SpringIoC机制的实现原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、为什么要使用Spring？Spring的设计目标"><a href="#一、为什么要使用Spring？Spring的设计目标" class="headerlink" title="一、为什么要使用Spring？Spring的设计目标"></a>一、为什么要使用Spring？Spring的设计目标</h2><p>在未引入框架之前的Java程序中，想要完成某一特定的业务逻辑，必然需要多个对象之间的协同合作，因而常常需要在对象内部实例化与之相互依赖的对象。这样必然会造成代码的高耦合性，也不便于以后的维护和管理。那么我们会想到，能不能使用一个类似于容器的工具去帮助我们管理这些对象实例化的过程？<br>
+        
+          <a class="article-more-a" href="/2018/08/27/SpringIoC机制的实现原理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/SpringIoC机制的实现原理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-谈谈Mybatis的原理及其工作流程 (1)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Mybatis的介绍"><a href="#一、Mybatis的介绍" class="headerlink" title="一、Mybatis的介绍"></a>一、Mybatis的介绍</h2><p>   Mybatis作为Java常用的访问数据库层的框架，其工作主要交给创建的Sqlsession对象完成，那么Sqlsession对象是如何创建的？它又是去如何去对数据库进行操作？<br>       如图所示，是我们常用的使用mybatis进行数据库访问的方式，现在我们按照上面得步骤来一次分析整个数据库访问的流程及其原理。<br>      <img src="https://img-blog.csdn.net/20180512154416830?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>
+        
+          <a class="article-more-a" href="/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-谈谈对AQS的一些理解 (1)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AQS的概念"><a href="#AQS的概念" class="headerlink" title="AQS的概念"></a>AQS的概念</h2><p>   AQS全称AbstractQueuedSynchronizer，是java并发包中的核心类，诸如ReentrantLock，CountDownLatch等工具内部都使用了AQS去维护锁的获取与释放：<img src="https://img-blog.csdn.net/20180718200145290?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="CountDownLatch"><br>   <img src="https://img-blog.csdn.net/20180718200232572?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="AbstractQueuedSynchronizer"><br>
+        
+          <a class="article-more-a" href="/2018/08/27/谈谈对AQS的一些理解 (1)/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/谈谈对AQS的一些理解 (1)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-深入理解并发编程中volatile关键字的作用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、volatile概述"><a href="#一、volatile概述" class="headerlink" title="一、volatile概述"></a>一、volatile概述</h2><p>volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线程并未完成，那么便需要创建内存来保留当前线程中的指令和数据，等到下次争取到时间片以后，再次需要把这些指令和数据加载进来。显而易见，这是一个非常耗时和耗费资源的过程。而volatile则可以避免线程上下文的切换，为什么能做到以及如何做？下文见分晓<br>
+        
+          <a class="article-more-a" href="/2018/08/27/深入理解并发编程中volatile关键字的作用/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/深入理解并发编程中volatile关键字的作用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Spring-MVC概念"><a href="#一、Spring-MVC概念" class="headerlink" title="一、Spring MVC概念"></a>一、Spring MVC概念</h2><p>MVC即是模型（Model）、视图（View）、控制器（Controller）的简称。其中M负责对应用数据进行封装，并向外提供应用功能的接口；V负责通过向控制器发送请求，得到响应结果，并向用户展示处理好的的应用数据；C这是用于定义应用的功能，接收用户的动作，并选择相应的视图。Spring MVC就相当于Spring的一个处理模型、视图和控制器的框架，下面我们来分析Spring MVC是如何处理请求，封装数据，再以特定的视图展示给用户的。<br>
+        
+          <a class="article-more-a" href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-MySQL的explain语句分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Explain概述"><a href="#一、Explain概述" class="headerlink" title="一、Explain概述"></a>一、Explain概述</h2><p>Mysql所提供的explain关键词是用于调优排患的一个神器，通过它可以分析查询语句的执行情况，DBA可以通过分析语句的执行结果对查询语句甚至表结构进行优化，<br>例如添加索引，修改索引，使用覆盖索引等等。<br>
+        
+          <a class="article-more-a" href="/2018/08/27/MySQL的explain语句分析/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/MySQL的explain语句分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-谈谈MySQL事务的实现原理之redo log" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、事务"><a href="#一、事务" class="headerlink" title="一、事务"></a>一、事务</h2><p>事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：</p>
+<ul>
+<li><p>原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。</p>
+</li>
+<li><p>一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。</p>
+</li>
+<li><p>隔离性（Isolation）：数据库系统提供一定的隔离机制，保证事务在不受外部并发操作影响的”独立”环境执行。</p>
+</li>
+<li><p>持久性（Durable）：事务完成后，它对于数据的修改是永久性的，即使出现系统故障也能够保持。</p>
+        
+          <a class="article-more-a" href="/2018/08/27/谈谈MySQL事务的实现原理之redo log/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/谈谈MySQL事务的实现原理之redo log/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 

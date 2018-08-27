@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | MrFuJack&#39;Blog</title>
+  <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="灵感源于生活">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
 <meta property="og:description" content="灵感源于生活">
 <meta property="og:locale" content="zh-Hanz">
@@ -159,232 +159,59 @@
           <div id="js-content" class="content-ll">
             
   
-  
+    <article id="post-深入理解SpringAOP的实现原理之代理对象的生成" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Spring-AOP概念"><a href="#一、Spring-AOP概念" class="headerlink" title="一、Spring AOP概念"></a>一、Spring AOP概念</h2><p>AOP(Aspect-Oriented Programming)面向切面或者面向方面编程的简称，将一些分散在对象或者类中的与业务逻辑无关的代码分离出来进行独立的管理编码，例如日志，事务处理，异常等。几个相关的重要概念：<br>1、方面/切面（Aspect）：一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用Spring的 Advisor或拦截器实现。<br>2、连接点（Joinpoint）: 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。<br>3、Advice(通知)：定义连接点做什么，为切面增强提供织入接口。如BeforeAdivice、AfterAdvice、ThrowsAdvice，其中前两者分别实现了before()和AfterRunning()回调方法，而后者则通过反射机制完成。<br>4、Pointcut(切点)：决定Advice通知应该作用于哪个连接点，也就是说通过Pointcut来定义需要增强的方法的集合，其通常意味着标识方法。对于Pointcut的判断功能，具体是由一个返回得MethodMatcher来完成，由它判断是否要对当前方法进行增强，或者是否需要对当前调用方法应用配置好的Advice通知。<br>5、Advisor(通知器)：用于结合目标对象的切面增强设计(Advice)和关注点设计(Pointcut)，通过Advisor，可以定义应该使用哪个通知并在哪个关注点使用它。<br>
+        
+          <a class="article-more-a" href="/2018/08/27/深入理解SpringAOP的实现原理之代理对象的生成/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（一）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:13.171Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/27/深入理解SpringAOP的实现原理之代理对象的生成/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/使用jsoup和httpclient编写的简单爬虫工具/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:00.447Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（二）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:50.910Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/SpringIoC机制的实现原理/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:40.660Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:24.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈对AQS的一些理解 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:16.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/深入理解并发编程中volatile关键字的作用/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:08.127Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:59.375Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/MySQL的explain语句分析/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:51.629Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈MySQL事务的实现原理之redo log/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:41.257Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
-  
-
-    
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
     </nav>
   
 
@@ -408,9 +235,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
+		isHome: true,
 		isPost: false,
-		isArchive: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

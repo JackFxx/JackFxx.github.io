@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | MrFuJack&#39;Blog</title>
+  <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="灵感源于生活">
-<meta property="og:type" content="website">
+  <meta name="description" content="一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：  原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。  一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。  隔离性（Isolation）：数据库">
+<meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/谈谈MySQL事务的实现原理之redo log/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="灵感源于生活">
+<meta property="og:description" content="一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：  原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。  一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。  隔离性（Isolation）：数据库">
 <meta property="og:locale" content="zh-Hanz">
+<meta property="og:updated_time" content="2018-08-27T07:32:13.622Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="灵感源于生活">
+<meta name="twitter:description" content="一、事务事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：  原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。  一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。  隔离性（Isolation）：数据库">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -157,235 +158,177 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-谈谈MySQL事务的实现原理之redo log" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、事务"><a href="#一、事务" class="headerlink" title="一、事务"></a>一、事务</h2><p>事务是一组SQL语句组成的逻辑处理单元，而MySQL的事务想必大家都已经非常的清楚了，既然这里提到了它，顺便讲讲什么是ACID：</p>
+<ul>
+<li><p>原子性（Atomicity）：事务是一个原子操作单元。在当时原子是不可分割的最小元素，其对数据的修改，要么全部成功，要么全部都不成功。</p>
+</li>
+<li><p>一致性（Consistent）：事务开始到结束的时间段内，数据都必须保持一致状态。</p>
+</li>
+<li><p>隔离性（Isolation）：数据库系统提供一定的隔离机制，保证事务在不受外部并发操作影响的”独立”环境执行。</p>
+</li>
+<li><p>持久性（Durable）：事务完成后，它对于数据的修改是永久性的，即使出现系统故障也能够保持。</p>
+<a id="more"></a>
+<p>二、MySQL的事务实现原理</p>
+</li>
+</ul>
+<hr>
+<p>MySQL中的事务主要通过redo log和undo log，以及锁实现，其中redo log主要用于保证事务的原子性和持久性，而undo log主要用于保证事务的一致性，锁则是用于实现隔离性。undo log中记录的主要是一些逻辑日志，如一条条的SQL语句，对于更新语句，每一条插入对应着删除，每一条修改对应着修改为最初版本的语句。而redo log主要记录的则是一些物理日志，是记录的对页（非连续存储导员）实实在在物理修改操作，其中主要分为两部分，一部分是redo log buffer存储于缓存之中，是易丢失的，一部分是redo log file存储于磁盘中，是持久化的。下面主要讲讲redo log的一些实现策略。</p>
+<h2 id="三、innodb-flush-method分析"><a href="#三、innodb-flush-method分析" class="headerlink" title="三、innodb_flush_method分析"></a>三、innodb_flush_method分析</h2><p>这里提到操作系统中的一个fsync函数，操作系统用它将内存中所有发生了修改的文件同步到存储设备之中。<br>在默认情况之下，MySQL使用innodb存储引擎之时，为了保证所产生的日志都能够刷新到redo log file之中，在每次将redo log buffer中的记录写入到redo log file之时，都需要调用一次fsync函数。策略是现将重做日志缓存中的记录写入到文件系统缓存，再调用一次fsync操作，将重做日志刷新到磁盘之中。可以通过innodb_flush_method参数进行调整，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like &quot;innodb_flush_method&quot;;</span><br><span class="line">+---------------------+-------+</span><br><span class="line">| Variable_name       | Value |</span><br><span class="line">+---------------------+-------+</span><br><span class="line">| innodb_flush_method |       |</span><br><span class="line">+---------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>其中innodb_flush_method主要有三种取值，第一种则是默认的fsync，即上文所提到的策略；第二种是O_DIRECT直接将重做日志缓存中的记录刷新到磁盘，不经过系统缓存，切记，这里同样会调用一次fsync函数，下文分晓；最后一种则是O_DSYNC表示以同步io的方式打开文件，任何写操作都将阻塞到数据写入物理磁盘后才会返回。详细的解释请参考：<a href="https://www.cnblogs.com/mydriverc/p/8301594.html" target="_blank" rel="noopener">INNODB_FLUSH_METHOD理解</a></p>
+<h2 id="四、刷新策略"><a href="#四、刷新策略" class="headerlink" title="四、刷新策略"></a>四、刷新策略</h2><p>由于fsync需要将内存中的修改同步到磁盘之中，因此它的效率与磁盘的性能密切相关，那么innodb是如何控制fsync的周期呢？<br>innodb中通过innodb_flush_log_at_trx_commit控制刷新的策略，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like &quot;innodb_flush_log_at_trx_commit&quot;;</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">| Variable_name                  | Value |</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">| innodb_flush_log_at_trx_commit | 1     |</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p>其中主要有三个取值，0：表示事务提交的时候不进行刷新到重做日志文件的操作，而是在master thread之中每隔1秒对其进行一次fsync操作。1：默认为1，表示事务每次提交则进行一次fsync操作。2：表示事务提交之时，仅仅将重做日志缓存写入到系统缓存之中，不进行fsync操作，只要操作系统不发生宕机，则事务不会丢失。很明显效率上是2&gt;0&gt;1，但由于2不能避免脏数据的出现，0仅仅限制于master thread之中，因此选择哪一个参数应当仔细斟酌。</p>
+<h2 id="五、设置为O-DIRECT之后依然会进行fsync"><a href="#五、设置为O-DIRECT之后依然会进行fsync" class="headerlink" title="五、设置为O_DIRECT之后依然会进行fsync"></a>五、设置为O_DIRECT之后依然会进行fsync</h2><p>当把innodb_flush_method参数单单设置为O_DIRECT以后，也许并不会让缓存的写入速度发生质的飞越，因为这里同样会进行一次fsync操作。在linux中，一切数据皆是文件，一个文件的身份识别是通过一个INODE，称为I节点，它主要有两部分组成，元数据和数据块。其中，元数据主要存储以下信息：</p>
+<ul>
+<li>文件的字节数 </li>
+<li>文件的时间戳</li>
+<li>文件的链接（软、硬链接）</li>
+<li>指向数据块的链接</li>
+</ul>
+<p>由于元数据相当于文件的身份标识符，因此一旦文件发生了更改，那么元数据也必须要做相应的改变。在linux中，元数据主要存储于INODE CACHE之中，而数据块则主要存于系统缓存之中，因此一旦文件发生了更新，则必须调用一次fsync更新INODE_CACHE中的元数据信息，否则将找不到访问文件的入口了。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（一）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:13.171Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/08/27/谈谈MySQL事务的实现原理之redo log/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/使用jsoup和httpclient编写的简单爬虫工具/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:00.447Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（二）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:50.910Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+    <a href="/2018/08/27/MySQL的explain语句分析/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/27/深入理解SpringAOP的实现原理之代理对象的生成/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/SpringIoC机制的实现原理/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:40.660Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:24.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈对AQS的一些理解 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:16.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/深入理解并发编程中volatile关键字的作用/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:08.127Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:59.375Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/MySQL的explain语句分析/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:51.629Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈MySQL事务的实现原理之redo log/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:41.257Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -409,8 +352,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

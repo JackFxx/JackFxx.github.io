@@ -6,18 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | MrFuJack&#39;Blog</title>
+  <title>MrFuJack&#39;Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="灵感源于生活">
-<meta property="og:type" content="website">
+  <meta name="description" content="一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线">
+<meta property="og:type" content="article">
 <meta property="og:title" content="MrFuJack&#39;Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/深入理解并发编程中volatile关键字的作用/index.html">
 <meta property="og:site_name" content="MrFuJack&#39;Blog">
-<meta property="og:description" content="灵感源于生活">
+<meta property="og:description" content="一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线">
 <meta property="og:locale" content="zh-Hanz">
+<meta property="og:image" content="https://img-blog.csdn.net/20180805120209236?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180805121157272?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-08-27T07:31:49.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrFuJack&#39;Blog">
-<meta name="twitter:description" content="灵感源于生活">
+<meta name="twitter:description" content="一、volatile概述volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180805120209236?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="MrFuJack&#39;Blog" type="application/atom+xml">
   
@@ -157,235 +161,156 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-深入理解并发编程中volatile关键字的作用" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、volatile概述"><a href="#一、volatile概述" class="headerlink" title="一、volatile概述"></a>一、volatile概述</h2><p>volatile是java并发编程中常用的一个关键字，在某些特定的情况下，开发人员通常用它去实现线程间的通信，而不是使用synchronized和Lock。因为在JVM的概念中，volatile是一种轻量级锁，使用它的消耗会远小于上述两种锁机制。当使用synchronized和Lock时会引起大量的线程上下文的切换。线程上下文切换：当处理机的一个时间片执行完成之时，而当前线程并未完成，那么便需要创建内存来保留当前线程中的指令和数据，等到下次争取到时间片以后，再次需要把这些指令和数据加载进来。显而易见，这是一个非常耗时和耗费资源的过程。而volatile则可以避免线程上下文的切换，为什么能做到以及如何做？下文见分晓<br><a id="more"></a></p>
+<h2 id="二、内存模型"><a href="#二、内存模型" class="headerlink" title="二、内存模型"></a>二、内存模型</h2><p>既然提到了线程之间的通信，那么就必然离不开JMM(Java Memory Model)。在JMM中，将程序运行时的内存主要划分为主内存和工作内存两部分。主内存中主要包括一些共享的数据，资源，每个线程都有自己的工作内存，里面存储有主内存中的共享数据和资源的副本，线程对共享资源的操作都是在自己所占有的工作内存的变量副本（又称高速缓存）中完成的。当线程执行完成以后，便会将自己对资源所做的更改刷新到主内存中，这样其余的线程便可以访问到了。显然，线程如何从主内存中读取资源到工作内存，而后又将资源刷新到主内存便是一个必然要考虑到的问题。</p>
+<h2 id="三、JVM的原子操作"><a href="#三、JVM的原子操作" class="headerlink" title="三、JVM的原子操作"></a>三、JVM的原子操作</h2><p>原子操作是指一系列不可中断的操作，Java中通过以下8个原子操作来实现资源在主内存和工作内存之间的交互：<br>lock：将对象变为独占模式<br>unlock：将锁住对象的锁释放<br>read：作用于主内存，将资源从主内存读取到工作内存<br>load：作用于工作内存，将资源从工作内存读取到工作内存中的变量副本之中<br>use：作用于工作内存，在变量副本中使用资源<br>assign：作用于工作内存，对变量副本中的资源进行更改赋值<br>store：作用于工作内存，将资源从变量副本卸载到工作内存<br>write：作用于主内存，将工作内存中的资源刷新到主内存<br>其中。read-load-use是将资源从主内存中读取到工作内存中不可中断的一系列操作，而assign-store-write则是刷新资源时的原子操作。到此，线程从主内存中读取数据，以及从工作内存刷新数据的问题已经解决了。试想，如果多个线程同时操作某一资源，如何一个线程对资源进行了更新，还未来得及刷新到主内存，另外的线程又在主内存中获取同样的资源，那么这必然是一份脏数据。Java编译器又是如何保证资源在线程之间的可见性的呢？</p>
+<h2 id="四、内存屏障"><a href="#四、内存屏障" class="headerlink" title="四、内存屏障"></a>四、内存屏障</h2><p>为了保证内存中资源的可见性，Java编译器在生成指令序列的时候，在适当的位置插入内存屏障指令，用以禁止特定类型的重排序，JMM中主要有一下4中内存屏障：<br>LoadLoad Barriers：确保Load1数据的装载要先于Load2及其所有后续数据的装载<br>StoreStore Barriers：确保Store1数据的卸载要先于Store2及其所有后续数据的卸载<br>LoadStore Barriers：确保Load1数据的装载要先于Store2及其所有后续数据的刷新<br>StoreLoad Barriers：确保Store1数据对于其它处理机的可见先于Load2及其随意后续数据的装载<br>其中StoreLoad具有前几种屏障的功能，但是它需要把所有写缓冲区中的资源，刷新到主内存中，因此需要慎用。下面我们回归主题，分析volatile的实现原理。</p>
+<h2 id="五、volatile原理"><a href="#五、volatile原理" class="headerlink" title="五、volatile原理"></a>五、volatile原理</h2><p>volatile主要作用是保证对象的可见性以及禁止指令重排序。注意，它并不能保证对象的原子性！<br>可见性：<br>被valotile修饰的变量在写操作的时候，会在编译之时在其中添加一条lock前缀指令。lock前缀指定会引起多核处理机发生以下两件事：<br>a：将当前处理机所缓存行的资源刷新到系统内存<br>b：上述的刷新操作会让其它地方缓存有该内存地址的资源失效<br>这样便可保证，每次线程对资源的更改在任何地方都是可见的<br>禁止指令重排序：<br>JMM在遇见由volatile修饰的对象资源之时，会在其适当的位置插入内存屏障以禁止指令重排序：<br>a：在每个volatile写之前插入一个StoreStore屏障（禁止volatile对象上面的普通写，与对它的volatile写重排序）<br>b：在每个volatile写之后插入一个StoreLoad屏障（禁止volatile对象的volatile写，与对它的volatile读重排序）<br>c：在每个volatile读之后插入一个LoadLoad屏障（禁止volatile对象的后序的读，与对它的volatile读重排序）<br>d：在每个volatile读之后插入一个LoadStore屏障（禁止volatile对象的后序写，与对它的volatile读重排序）<br>通过上述约定，便可禁止访问volatile对象的指令进行重排序</p>
+<h2 id="六、示例"><a href="#六、示例" class="headerlink" title="六、示例"></a>六、示例</h2><p>下面以单例模式的双重检查锁为例，看看volatile的具体使用：<br><img src="https://img-blog.csdn.net/20180805120209236?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="not singleton"><br>这是一个错误的示例，在多线程的情况下，可能instance并未初始化完成就返回了。原因：一个对象的创建过程大体分为三步：<br>1：为对象分配内存空间<br>2：初始化对象<br>3：将对对象的引用指向1中分配的内存空间的地址<br>倘若一个线程获取对象锁执行完第一步之后，发生了指令重排序，去执行第三步，此时又有新的线程刚进入，第一次检查便发现instance不等于null，便返回。但是，对象并未完成初始化，所以返回得对象并未我们所需要的。<br>加上volatile：<br><img src="https://img-blog.csdn.net/20180805121157272?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2phY2tGWFg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="singleton"><br>当使用volatile关键字修饰以后，便不会发生上述的指令重排序过程，因此便可保证所有线程获取到的对象都是同一个实例。</p>
+<p>注：本文是个人认识加上对参考书籍理解，若有不严谨之处，欢迎指正。^_^</p>
+<p>参考书籍：《Java并发编程的艺术》</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（一）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:13.171Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/08/27/深入理解并发编程中volatile关键字的作用/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/使用jsoup和httpclient编写的简单爬虫工具/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:28:00.447Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Linux常用命令总结（二）/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:50.910Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+    <a href="/2018/08/27/谈谈对AQS的一些理解 (1)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/SpringIoC机制的实现原理/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:40.660Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈Mybatis的原理及其工作流程 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:24.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈对AQS的一些理解 (1)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:16.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/深入理解并发编程中volatile关键字的作用/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:27:08.127Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/Spring MVC的工作原理-从M(Model)-C(Controller)-V(View)/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:59.375Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/MySQL的explain语句分析/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:51.629Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/27/谈谈MySQL事务的实现原理之redo log/" class="archive-article-date">
-  	<time datetime="2018-08-27T07:26:41.257Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -409,8 +334,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
